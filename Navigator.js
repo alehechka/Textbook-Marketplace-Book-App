@@ -9,15 +9,12 @@ import Screen from "./Screen";
 
 const Navigator = createSwitchNavigator(
   {
-    Splash: Screen.Splash,
-    SignUpPage: Screen.SignUp,
-    emailVerifyPage: Screen.emailVerify,
     Chat: Screen.Chat,
     Sell: Screen.Sell,
     Feed: Screen.Feed
   },
   {
-    initialRouteName: "Splash"
+    initialRouteName: "Feed"
   }
 );
 
