@@ -48,11 +48,6 @@ export default class Sell extends React.Component {
         }}
       >
         <TextInput
-          placeholder={"Key"}
-          underlineColorAndroid="transparent"
-          onChangeText={text => this.setState({ key: text })}
-        />
-        <TextInput
           placeholder={"Title"}
           underlineColorAndroid="transparent"
           onChangeText={text => this.setState({ title: text })}
@@ -81,16 +76,19 @@ export default class Sell extends React.Component {
           title={"Confirm"}
           disable={false}
           onPress={() => {
+
+            let result = firebase.database().ref("books/").push();
+            let key = result.key
             firebase
               .database()
-              .ref("books/" + this.state.key)
+              .ref("books/" + key)
               .set({
                 title: this.state.title,
                 isbn: this.state.isbn,
                 price: this.state.price,
                 category: this.state.category,
                 condition: this.state.condition,
-                key: this.state.key
+                key: key
               });
             this.props.navigation.navigate("Sell");
           }}
