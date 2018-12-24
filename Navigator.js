@@ -12,13 +12,13 @@ const Navigator = createSwitchNavigator(
     Chat: Screen.Chat,
     Sell: Screen.Sell,
     Feed: Screen.Feed,
-    Splash: Screen.Splash,
+    SignIn: Screen.SignIn,
     SignUpPage: Screen.SignUp,
     emailVerifyPage: Screen.emailVerify,
     Feed: Screen.Feed,
   },
   {
-    initialRouteName: "Splash"
+    initialRouteName: "SignIn"
   }
 );
 
