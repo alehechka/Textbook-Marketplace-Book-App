@@ -20,6 +20,15 @@ export default class LoginScreen extends React.Component {
         this.state = {userEmail: ''};
         this.state = {password: ''};
     }
+
+    componentWillMount() {
+        firebase.auth().onAuthStateChanged((user) => {
+            if(user) {
+                this.props.navigation.navigate('Feed');
+            }
+        })
+    }
+    
     render() {
         return (
             <View>
@@ -39,11 +48,9 @@ export default class LoginScreen extends React.Component {
                     disabled = {false}
                     title = 'Login'
                     onPress={() => {
-                        if((signIn(this.state.userEmail, this.state.password)) == true) {
-                            this.props.navigation.navigate('Feed');
-                        } else {
-                            Alert.alert("Invalid email or password, please try again");
-                        }
+                        console.log(this.state.userEmail);
+                        console.log(this.state.password);
+                        signIn(this.state.userEmail, this.state.password);
                     }}
                 />
                 <Button
@@ -58,7 +65,7 @@ export default class LoginScreen extends React.Component {
     }
 }
 function signIn(email, password) {
-    firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+    firebase.auth().signInWithEmailAndPassword(email, password).then(() => this.props.navigation.navigate('Feed')).catch(function(error) {
         //Handle errors here
         var errorCode = error.code;
         var errorMessage = error.message;

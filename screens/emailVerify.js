@@ -13,16 +13,9 @@ export default class emailVerify extends React.Component {
 
     componentDidMount() {
 
-        AppState.addEventListener('change', this._handleAppStateChange);   
-        
-        var currentUser = firebase.auth().currentUser;
-        currentUser.sendEmailVerification().then(function() {
-            //Function will go here
-            Alert.alert("An activation email has been sent, please verify your account.");
-            //Email sent
-        }).catch(function(error) {
-            //An error happened
-        });
+        AppState.addEventListener('change', this._handleAppStateChange);
+        var userID = firebase.auth().currentUser;
+        this.setState({currentUser:userID})
     }
 
     componentWillUnmount() {
@@ -36,7 +29,7 @@ export default class emailVerify extends React.Component {
             if(currentUser.emailVerified == true) {
                 this.props.navigation.navigate('Feed');
             }else{
-                verifyEmail();
+                sendVerifyEmail();
             }
         }
         this.setState({appState: nextAppState});
@@ -52,7 +45,14 @@ export default class emailVerify extends React.Component {
                     disabled = {false}
                     title = 'Did not recieve an email?'
                     onPress={() => {
-                        
+                        sendVerifyEmail();
+                    }}
+                />
+                <Button
+                    disabled = {false}
+                    title = "Press me to navigate to Feed, dono"
+                    onPress={() => {
+                        this.props.navigation.navigate('Feed');
                     }}
                 />
             </View>
@@ -60,7 +60,7 @@ export default class emailVerify extends React.Component {
     }
 }
 
-function verifyEmail () {
+function sendVerifyEmail () {
     var currentUser = firebase.auth().currentUser;
     currentUser.sendEmailVerification().then(function() {
         //Function will go here
