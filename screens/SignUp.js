@@ -4,15 +4,6 @@ import {createStackNavigator} from 'react-navigation';
 import navigation from 'react-navigation';
 import firebase from 'firebase';
 
-var config = {
-    apiKey: "AIzaSyAbCe6BOkzZsi563qjQVI0eqtKi29h6lLA",
-    authDomain: "bookapp-84f81.firebaseapp.com",
-    databaseURL: "https://bookapp-84f81.firebaseio.com",
-    projectId: "bookapp-84f81",
-    storageBucket: "bookapp-84f81.appspot.com",
-    messagingSenderId: "529834574804"
-  };
-  firebase.initializeApp(config);
 
 export default class SignUp extends React.Component {
     constructor(props) {

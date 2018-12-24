@@ -3,6 +3,17 @@ import { StyleSheet, Text, View, TextInput, Button, Alert} from 'react-native';
 import {createStackNavigator} from 'react-navigation';
 import firebase from 'firebase';
 
+const firebaseConfig = {
+  apiKey: "AIzaSyDr4YvpZXX752crkGU0ESjHTMm8yHAFi78",
+  authDomain: "bookapp-cf18c.firebaseapp.com",
+  databaseURL: "https://bookapp-cf18c.firebaseio.com/",
+  projectId: "bookapp-cf18c",
+  storageBucket: "bookapp-cf18c.appspot.com",
+  messagingSenderId: "49641427326"
+};
+
+firebase.initializeApp(firebaseConfig);
+
 export default class LoginScreen extends React.Component {
     constructor(props) {
         super(props);

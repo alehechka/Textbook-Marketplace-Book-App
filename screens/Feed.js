@@ -10,14 +10,7 @@ import {
 
 import { List, ListItem, Avatar, Icon } from "react-native-elements";
 import firebase from "firebase";
-const firebaseConfig = {
-  apiKey: "AIzaSyDr4YvpZXX752crkGU0ESjHTMm8yHAFi78",
-  authDomain: "bookapp-cf18c.firebaseapp.com",
-  databaseURL: "https://bookapp-cf18c.firebaseio.com/",
-  projectId: "bookapp-cf18c",
-  storageBucket: "bookapp-cf18c.appspot.com",
-  messagingSenderId: "49641427326"
-};
+
 
 import { StackNavigator } from "react-navigation";
 
@@ -25,7 +18,7 @@ import { _ } from "lodash";
 
 console.disableYellowBox = true;
 
-firebase.initializeApp(firebaseConfig);
+
 
 export default class Feed extends React.Component {
   static navigationOptions = {
