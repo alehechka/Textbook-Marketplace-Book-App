@@ -39,31 +39,32 @@ export default class LoginScreen extends React.Component {
     });
   }
 
-  onPressSignup=() => {
+  onPressSignup = () => {
     this.props.navigation.navigate("SignUpPage");
-  }
+  };
 
-
-  onPressLogin=() => {
+  onPressLogin = () => {
     console.log(this.state.userEmail);
     console.log(this.state.password);
     signIn(this.state.userEmail, this.state.password);
-  }
+  };
 
   render() {
     return (
       <View style={[styles.container]}>
-      <Image
-          style = {[styles.icon]}
-          source={require('../assets/tempicon.png')}
+      <View style={{alignItems: 'center'}}>
+        <Image
+          style={[styles.icon]}
+          source={require("../assets/tempicon.png")}
         />
-        <Text style={[styles.abovetextE]}>Email</Text>
+        </View>
+        <Text style={[styles.abovetext]}>Email</Text>
         <TextInput
           style={[styles.textbox]}
           placeholder={" ex: jdoe@college.edu"}
           onChangeText={text => this.setState({ userEmail: text })}
         />
-        <Text style={[styles.abovetextP]}>Password</Text>
+        <Text style={[styles.abovetext]}>Password</Text>
         <TextInput
           style={[styles.textbox]}
           placeholder={" Required: lower, upper, number, symbol"}
@@ -71,12 +72,14 @@ export default class LoginScreen extends React.Component {
           secureTextEntry={true}
           onChangeText={text => this.setState({ password: text })}
         />
-        <TouchableOpacity style={[styles.button]} onPress={this.onPressLogin}>
-          <Text style={[styles.buttontext]}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.button]} onPress={this.onPressSignup}>
-          <Text style={[styles.buttontext]}>Sign up</Text>
-        </TouchableOpacity>
+        <View style={{alignItems: 'center'}}>
+          <TouchableOpacity style={[styles.button]} onPress={this.onPressLogin}>
+            <Text style={[styles.buttontext]}>Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.button]} onPress={this.onPressSignup}>
+            <Text style={[styles.buttontext]}>Sign up</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }

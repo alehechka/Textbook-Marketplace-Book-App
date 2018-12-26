@@ -18,7 +18,7 @@ const Navigator = createSwitchNavigator(
     Feed: Screen.Feed,
   },
   {
-    initialRouteName: "SignIn"
+    initialRouteName: "Sell"
   }
 );
 

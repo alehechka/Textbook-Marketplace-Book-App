@@ -26,7 +26,8 @@ export default class SignUp extends React.Component {
   render() {
     onPressSignup = () => {
       if (
-        testPasswords(this.state.password, this.state.confirmedPassword) == false
+        testPasswords(this.state.password, this.state.confirmedPassword) ==
+        false
       ) {
         Alert.alert("Your passwords do not match, please try again");
       } else {
@@ -43,32 +44,39 @@ export default class SignUp extends React.Component {
 
     return (
       <View style={[styles.container]}>
-      <Image
-          style = {[styles.icon]}
-          source={require('../assets/tempicon.png')}
+        <View style={{alignItems: 'center'}}>
+        <Image
+          style={[styles.icon]}
+          source={require("../assets/tempicon.png")}
         />
-        <Text style={[styles.abovetextE]}>Email</Text>
+        </View>
+        <Text style={[styles.abovetext]}>Email</Text>
         <TextInput
           style={[styles.textbox]}
           onChangeText={text => this.setState({ email: text })}
         />
-        <Text style={[styles.abovetextP]}>Password</Text>
+        <Text style={[styles.abovetext]}>Password</Text>
         <TextInput
           style={[styles.textbox]}
           password={true}
           secureTextEntry={true}
           onChangeText={text => this.setState({ password: text })}
         />
-        <Text style={[styles.abovetextCP]}>Confirm Password</Text>
+        <Text style={[styles.abovetext]}>Confirm Password</Text>
         <TextInput
           style={[styles.textbox]}
           password={true}
           secureTextEntry={true}
           onChangeText={text => this.setState({ confirmedPassword: text })}
         />
-        <TouchableOpacity style={[styles.button]} onPress={this.onPressSignup}>
-          <Text style={[styles.buttontext]}>Sign up</Text>
-        </TouchableOpacity>
+        <View style={{ alignItems: "center" }}>
+          <TouchableOpacity
+            style={[styles.button]}
+            onPress={this.onPressSignup}
+          >
+            <Text style={[styles.buttontext]}>Sign up</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }

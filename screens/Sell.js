@@ -6,9 +6,11 @@ import {
   Button,
   FlatList,
   ScrollView,
-  TextInput
+  TextInput,
+  TouchableOpacity,
+  Image
 } from "react-native";
-
+import styles from "../styles/base.js";
 import { List, ListItem, Avatar } from "react-native-elements";
 import firebase from "firebase";
 
@@ -29,62 +31,84 @@ export default class Sell extends React.Component {
   }
 
   render() {
+    onPressSell = () => {
+      let result = firebase
+        .database()
+        .ref("books/")
+        .push();
+      let key = result.key;
+      firebase
+        .database()
+        .ref("books/" + key)
+        .set({
+          title: this.state.title,
+          isbn: this.state.isbn,
+          price: this.state.price,
+          major: this.state.major,
+          course: this.state.course,
+          key: key
+        });
+      this.props.navigation.navigate("Sell");
+    };
     return (
-      <View
-        style={{
-          marginTop: 50,
-          flexDirection: "column",
-          justifyContent: "space-around",
-          alignItems: "center",
-          flex: 1
-        }}
-      >
+      <View style={[styles.container]}>
+      <View style={{alignItems: 'center'}}>
+        <Image
+          style={[styles.icon]}
+          source={require("../assets/tempicon.png")}
+        />
+        </View>
+        <Text style={[styles.abovetext]}>Title</Text>
         <TextInput
-          placeholder={"Title"}
-          underlineColorAndroid="transparent"
+          style={[styles.textbox]}
+          placeholder={""}
           onChangeText={text => this.setState({ title: text })}
         />
+        <Text style={[styles.abovetext]}>ISBN</Text>
         <TextInput
-          placeholder={"ISBN"}
-          underlineColorAndroid="transparent"
+          style={[styles.textbox]}
+          placeholder={""}
           onChangeText={text => this.setState({ isbn: text })}
         />
-        <TextInput
-          placeholder={"Price"}
-          underlineColorAndroid="transparent"
-          onChangeText={text => this.setState({ price: text })}
-        />
-        <TextInput
-          placeholder={"Category"}
-          underlineColorAndroid="transparent"
-          onChangeText={text => this.setState({ category: text })}
-        />
-        <TextInput
-          placeholder={"Condition"}
-          underlineColorAndroid="transparent"
-          onChangeText={text => this.setState({ condition: text })}
-        />
-        <Button
-          title={"Confirm"}
-          disable={false}
-          onPress={() => {
-
-            let result = firebase.database().ref("books/").push();
-            let key = result.key
-            firebase
-              .database()
-              .ref("books/" + key)
-              .set({
-                title: this.state.title,
-                isbn: this.state.isbn,
-                price: this.state.price,
-                category: this.state.category,
-                condition: this.state.condition,
-                key: key
-              });
-            this.props.navigation.navigate("Sell");
-          }}
-        />
+        <View style={[styles.row]}>
+          <Text style={[styles.abovetext]}>Major</Text>
+          <Text style={[styles.abovetext, {marginLeft: 150}]}>Course</Text>
+        </View>
+        <View style={[styles.row]}>
+          <TextInput
+            style={[styles.halfbox, { marginRight: 15 }]}
+            placeholder={""}
+            onChangeText={text => this.setState({ major: text })}
+          />
+          <TextInput
+            style={[styles.halfbox, { marginLeft: 15 }]}
+            placeholder={""}
+            onChangeText={text => this.setState({ course: text })}
+          />
+        </View>
+        <View style={[styles.row]}>
+          <TouchableOpacity
+            style={[styles.uploadbutton, { marginRight: 15 }]}
+            onPress={this.onPressUpload}
+          >
+            <Text style={[styles.buttontext]}>Upload</Text>
+            <Text style={[styles.buttontext]}>Image</Text>
+          </TouchableOpacity>
+          <View style={{ flexDirection: "column" }}>
+            <Text style={[styles.abovetext, { marginLeft: 15 }]}>Price</Text>
+            <TextInput
+              style={[styles.halfbox, { marginLeft: 15 }]}
+              placeholder={""}
+              onChangeText={text => this.setState({ price: text })}
+            />
+            <TouchableOpacity
+              style={[styles.button, { marginLeft: 15 }]}
+              onPress={this.onPressSell}
+            >
+              <Text style={[styles.buttontext]}>List Item</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
     );
   }
