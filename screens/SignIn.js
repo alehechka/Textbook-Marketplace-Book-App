@@ -25,6 +25,9 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 export default class LoginScreen extends React.Component {
+  static navigationOptions = {
+    header: null
+  };
   constructor(props) {
     super(props);
     this.state = { userEmail: "" };
@@ -40,7 +43,7 @@ export default class LoginScreen extends React.Component {
   }
 
   onPressSignup = () => {
-    this.props.navigation.navigate("SignUpPage");
+    this.props.navigation.navigate("SignUp");
   };
 
   onPressLogin = () => {
@@ -66,14 +69,14 @@ export default class LoginScreen extends React.Component {
         />
         <Text style={[styles.abovetext]}>Password</Text>
         <TextInput
-          style={[styles.textbox]}
+          style={[styles.textbox, {marginBottom: 25}]}
           placeholder={" Required: lower, upper, number, symbol"}
           password={true}
           secureTextEntry={true}
           onChangeText={text => this.setState({ password: text })}
         />
         <View style={{alignItems: 'center'}}>
-          <TouchableOpacity style={[styles.button]} onPress={this.onPressLogin}>
+          <TouchableOpacity style={[styles.button, {marginBottom: 25}]} onPress={this.onPressLogin}>
             <Text style={[styles.buttontext]}>Login</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.button]} onPress={this.onPressSignup}>

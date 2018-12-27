@@ -58,7 +58,7 @@ export default class Feed extends React.Component {
             <ListItem
               avatar={
                 <Avatar
-                  source={require("./bookDefault.png")}
+                  source={require("../assets/bookDefault.png")}
                   xlarge
                   onPress={() => console.log("YOTE")}
                 />

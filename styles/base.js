@@ -3,19 +3,25 @@ import {  StyleSheet } from "react-native";
 export default styles = StyleSheet.create({
     container: {
       flex: 1,
+      backgroundColor: 'white',
       flexDirection: 'column',
       justifyContent: "center",
       alignItems: "stretch",
       paddingHorizontal: 25
     },
     row: {
-      //flex: 1,
       flexDirection: 'row',
       alignItems: 'stretch'
     },
     icon: {
       height: 150,
       width: 165,
+    },
+    barcode: {
+      height: 75,
+      width: 250,
+      marginBottom: 10,
+      marginTop: 20
     },
     abovetext: {
       textAlign: "left",
@@ -24,14 +30,14 @@ export default styles = StyleSheet.create({
     },
     abovetextV: {
       color: "#847B7B",
-      fontSize: 24,
+      fontSize: 22,
       marginBottom: 40
     },
     textbox: {
       height: 40,
       borderColor: "gray",
       borderWidth: 1,
-      marginBottom: 25,
+      marginBottom: 15,
     },
     halfbox: {
       height: 40,
@@ -43,16 +49,14 @@ export default styles = StyleSheet.create({
     button: {
       height: 49,
       width: 145,
-      marginBottom: 25,
       backgroundColor: "#E0A315",
       justifyContent: "center",
       alignItems: "center",
       borderRadius: 50
     },
     uploadbutton: {
-      height: 140,
+      height: 130,
       flex: 1,
-      marginBottom: 25,
       backgroundColor: "#E0A315",
       justifyContent: "center",
       alignItems: "center",

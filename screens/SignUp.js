@@ -16,6 +16,9 @@ import navigation from "react-navigation";
 import firebase from "firebase";
 
 export default class SignUp extends React.Component {
+  static navigationOptions = {
+    header: null
+  };
   constructor(props) {
     super(props);
     this.state = { email: "" };
@@ -37,7 +40,7 @@ export default class SignUp extends React.Component {
           );
         } else {
           createAccount(this.state.email, this.state.confirmedPassword);
-          this.props.navigation.navigate("emailVerifyPage");
+          this.props.navigation.navigate("Email");
         }
       }
     };
@@ -53,18 +56,20 @@ export default class SignUp extends React.Component {
         <Text style={[styles.abovetext]}>Email</Text>
         <TextInput
           style={[styles.textbox]}
+          placeholder={" ex: jdoe@college.edu"}
           onChangeText={text => this.setState({ email: text })}
         />
         <Text style={[styles.abovetext]}>Password</Text>
         <TextInput
           style={[styles.textbox]}
+          placeholder={" Required: lower, upper, number, symbol"}
           password={true}
           secureTextEntry={true}
           onChangeText={text => this.setState({ password: text })}
         />
         <Text style={[styles.abovetext]}>Confirm Password</Text>
         <TextInput
-          style={[styles.textbox]}
+          style={[styles.textbox, {marginBottom: 25}]}
           password={true}
           secureTextEntry={true}
           onChangeText={text => this.setState({ confirmedPassword: text })}

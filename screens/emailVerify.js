@@ -13,6 +13,9 @@ import firebase from "firebase";
 import styles from "../styles/base.js";
 
 export default class emailVerify extends React.Component {
+  static navigationOptions = {
+    header: null
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -58,7 +61,7 @@ export default class emailVerify extends React.Component {
       <View style={[styles.container]}>
         <View style={{ alignItems: "center" }}>
           <Text style={[styles.abovetextV]}>Waiting for email verification...</Text>
-          <TouchableOpacity style={[styles.button]} onPress={this.onPressVerifyEmail}>
+          <TouchableOpacity style={[styles.button, {marginBottom: 25}]} onPress={this.onPressVerifyEmail}>
             <Text style={[styles.buttontext]}>Send again</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.button]} onPress={this.onPressFeed}>

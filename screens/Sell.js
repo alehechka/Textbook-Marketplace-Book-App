@@ -50,13 +50,27 @@ export default class Sell extends React.Component {
         });
       this.props.navigation.navigate("Sell");
     };
+
+    onPressScan = () => {
+
+    };
+
+    onPressUpload = () => {
+
+    };
     return (
       <View style={[styles.container]}>
-      <View style={{alignItems: 'center'}}>
-        <Image
-          style={[styles.icon]}
-          source={require("../assets/tempicon.png")}
-        />
+        <View style={{ alignItems: "center" }}>
+          <Image
+            style={[styles.barcode]}
+            source={require("../assets/barcode.png")}
+          />
+          <TouchableOpacity
+            style={[styles.button, { width: 165, marginBottom: 15 }]}
+            onPress={this.onPressScan}
+          >
+            <Text style={[styles.buttontext]}>Scan Barcode</Text>
+          </TouchableOpacity>
         </View>
         <Text style={[styles.abovetext]}>Title</Text>
         <TextInput
@@ -72,7 +86,7 @@ export default class Sell extends React.Component {
         />
         <View style={[styles.row]}>
           <Text style={[styles.abovetext]}>Major</Text>
-          <Text style={[styles.abovetext, {marginLeft: 150}]}>Course</Text>
+          <Text style={[styles.abovetext, { marginLeft: 140 }]}>Course</Text>
         </View>
         <View style={[styles.row]}>
           <TextInput
