@@ -1,5 +1,6 @@
 import React from "react";
 import {  StyleSheet } from "react-native";
+import Colors from '../constants/Colors';
 export default styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -28,7 +29,7 @@ export default styles = StyleSheet.create({
       color: "#BAB7B7",
       fontSize: 15,
     },
-    abovetextV: {
+    abovetextVerify: {
       color: "#847B7B",
       fontSize: 22,
       marginBottom: 40
@@ -49,7 +50,7 @@ export default styles = StyleSheet.create({
     button: {
       height: 49,
       width: 145,
-      backgroundColor: "#E0A315",
+      backgroundColor: Colors.tintColor,
       justifyContent: "center",
       alignItems: "center",
       borderRadius: 50
@@ -57,7 +58,7 @@ export default styles = StyleSheet.create({
     uploadbutton: {
       height: 130,
       flex: 1,
-      backgroundColor: "#E0A315",
+      backgroundColor: Colors.tintColor,
       justifyContent: "center",
       alignItems: "center",
     },

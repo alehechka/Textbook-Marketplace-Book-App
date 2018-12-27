@@ -86,7 +86,7 @@ export default class Sell extends React.Component {
         />
         <View style={[styles.row]}>
           <Text style={[styles.abovetext]}>Major</Text>
-          <Text style={[styles.abovetext, { marginLeft: 140 }]}>Course</Text>
+          <Text style={[styles.abovetext, { marginLeft: 135 }]}>Course</Text>
         </View>
         <View style={[styles.row]}>
           <TextInput

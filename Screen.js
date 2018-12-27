@@ -5,5 +5,6 @@ import Sell from "./screens/Sell.js";
 import SignIn from './screens/SignIn';
 import SignUp from './screens/SignUp';
 import emailVerify from './screens/emailVerify';
+import Threads from './screens/Threads';
 
-export default {Chat, Feed, Sell, SignIn, SignUp, emailVerify, };
+export default {Chat, Feed, Sell, SignIn, SignUp, emailVerify, Threads};

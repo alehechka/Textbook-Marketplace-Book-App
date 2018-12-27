@@ -11,14 +11,14 @@ const FeedStack = createStackNavigator({
 });
 
 FeedStack.navigationOptions = {
-  title: 'Feed',
+  title: 'Buy',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
       name={
         Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
+          ? `ios-filing${focused ? '' : '-outline'}`
+          : 'md-filing'
       }
     />
   ),
@@ -37,7 +37,29 @@ SellStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+      name={Platform.OS === 'ios' ? 'ios-cash' : 'md-cash'}
+    />
+  ),
+  tabBarOptions: {
+    activeTintColor: Colors.tintColor,
+    inactiveTintColor: Colors.tabIconDefault,
+  },
+};
+
+const ThreadStack = createStackNavigator({
+  Threads: Screen.Threads,
+});
+
+ThreadStack.navigationOptions = {
+  title: 'Books',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-barcode${focused ? '' : '-outline'}`
+          : 'md-barcode'
+      }
     />
   ),
   tabBarOptions: {
@@ -51,11 +73,11 @@ const LoginStack = createStackNavigator({
 });
 
 LoginStack.navigationOptions = {
-  title: 'Login',
+  title: 'Profile',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+      name={Platform.OS === 'ios' ? 'ios-contact' : 'md-contact'}
     />
   ),
   tabBarOptions: {
@@ -67,5 +89,6 @@ LoginStack.navigationOptions = {
 export default createBottomTabNavigator({
   FeedStack,
   SellStack,
+  ThreadStack,
   LoginStack,
 });

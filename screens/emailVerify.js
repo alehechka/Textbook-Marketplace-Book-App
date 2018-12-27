@@ -60,7 +60,7 @@ export default class emailVerify extends React.Component {
     return (
       <View style={[styles.container]}>
         <View style={{ alignItems: "center" }}>
-          <Text style={[styles.abovetextV]}>Waiting for email verification...</Text>
+          <Text style={[styles.abovetextVerify]}>Waiting for email verification...</Text>
           <TouchableOpacity style={[styles.button, {marginBottom: 25}]} onPress={this.onPressVerifyEmail}>
             <Text style={[styles.buttontext]}>Send again</Text>
           </TouchableOpacity>
