@@ -77,11 +77,9 @@ export default class LoginScreen extends React.Component {
           secureTextEntry={true}
           onChangeText={text => this.setState({ password: text })}
         />
-        <View style={{ alignItems: "center" }}>
-          <TouchableOpacity
-            style={[styles.button, { marginBottom: 25 }]}
-            onPress={this.onPressLogin}
-          >
+        <View style={{alignItems: 'center'}}>
+          <TouchableOpacity style={[styles.button, {marginBottom: 25}]}
+            onPress={this.onPressLogin}>
             <Text style={[styles.buttontext]}>Login</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -106,4 +104,5 @@ function signIn(email, password) {
       var errorMessage = error.message;
       console.log(error);
     });
+    
 }
