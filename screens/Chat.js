@@ -64,11 +64,15 @@ export default class Chat extends React.Component {
           .once("value")
           .then(snapshot => {
             console.log(snapshot.val());
+
+            //CREATE THREAD. LOTS OF INFO TO DO HOLY SHIT I HATE this
             if (snapshot.val() == null) {
-              const min = 1;
-              const max = 100;
-              const thread = min + Math.random() * (max - min);
-              //CREATE THREAD. LOTS OF INFO TO DO HOLY SHIT I HATE this
+              let result = firebase
+                  .database()
+                  .ref("users/threads/")
+                  .push();
+                let thread = result.key;
+              
               console.log("Need to create a thread");
 
               firebase
@@ -81,7 +85,8 @@ export default class Chat extends React.Component {
                     "/threads/"
                 )
                 .set({
-                  sellerUID: thread
+                  sellerUID: sellerUID,
+                  threadKey: thread,
                 });
             } else {
               this.setState({

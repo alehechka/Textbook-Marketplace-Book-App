@@ -27,7 +27,7 @@ export default class Feed extends React.Component {
     this.state = {
       infoList: [],
       loading: true,
-      currentUser: 123
+      currentUser: "-LUwfgY-M3fTZd_Rxi0z" //THIS IS DUNGOS USER ID. NEED A WAY TO SET GLOBAL USER ID WHEN A USER SIGNS IN AND MAINTAIN IT. I think firebase has a function
     };
   }
 
@@ -47,21 +47,13 @@ export default class Feed extends React.Component {
       });
   };
 
-  onPressChat = () => {
-    console.log("Chat");
-    /*this.props.navigation.navigate("Chat", {
-      bookKey: key,
-      currentUID: this.state.currentUser
-    });*/
-  };
 
   render() {
     return (
       <ScrollView style={{ marginTop: 20 }}>
-        <List>  
+        <List>
           {this.state.infoList.map(item => (
             <ListItem
-              onPress={this.onPressChat}
               avatar={
                 <Avatar
                   source={require("../assets/bookDefault.png")}
@@ -70,6 +62,22 @@ export default class Feed extends React.Component {
                 />
               }
               key={item.key}
+
+              rightIcon={
+                 <Button
+                   style={{ height: 100 }}
+                   title={"chat"}
+                   disable={false}
+                   onPress={() => {
+                     this.props.navigation.navigate("Chat", {
+                       bookKey: item.key,
+                       currentUID: this.state.currentUser
+                     });
+                   }}
+                 />
+             }
+
+
               title={item.title}
               subtitle={
                 <View style={{ marginLeft: 20 }}>

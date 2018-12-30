@@ -110,4 +110,20 @@ function createAccount(email, password) {
       var errorcode = error.code;
       var errorMessage = error.message;
     });
+
+    let result = firebase
+        .database()
+        .ref("users/")
+        .push();
+      let key = result.key;
+      //NEEd TO HAVE A WAY TO MAKE SURE A USER DOESNT SIGN UP TWICE OR DATABSE INTEGRITY WILL CRUMBLE!!!
+    firebase
+        .database()
+        .ref("users/" + key)
+        .set({
+          email: email,
+          verified: "true",
+
+        });
+    global.currentUser = key;
 }
