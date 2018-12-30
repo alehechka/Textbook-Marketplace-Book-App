@@ -43,10 +43,12 @@ export default class LoginScreen extends React.Component {
   }
 
   onPressSignup = () => {
+    console.log("Sign up1");
     this.props.navigation.navigate("SignUp");
   };
 
   onPressLogin = () => {
+    console.log("Sign in");
     console.log(this.state.userEmail);
     console.log(this.state.password);
     signIn(this.state.userEmail, this.state.password);
@@ -76,7 +78,8 @@ export default class LoginScreen extends React.Component {
           onChangeText={text => this.setState({ password: text })}
         />
         <View style={{alignItems: 'center'}}>
-          <TouchableOpacity style={[styles.button, {marginBottom: 25}]} onPress={this.onPressLogin}>
+          <TouchableOpacity style={[styles.button, {marginBottom: 25}]} 
+            onPress={this.onPressLogin}>
             <Text style={[styles.buttontext]}>Login</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.button]} onPress={this.onPressSignup}>

@@ -14,7 +14,7 @@ import styles from "../styles/base.js";
 import { List, ListItem, Avatar } from "react-native-elements";
 import firebase from "firebase";
 
-import { StackNavigator } from "react-navigation";
+import { createStackNavigator } from "react-navigation";
 
 import { _ } from "lodash";
 
@@ -29,10 +29,8 @@ export default class Sell extends React.Component {
 
     this.state = {};
   }
-
-  render() {
-    onPressSell = () => {
-      let result = firebase
+  onPressSell = () => {
+    /*let result = firebase
         .database()
         .ref("books/")
         .push();
@@ -47,17 +45,19 @@ export default class Sell extends React.Component {
           major: this.state.major,
           course: this.state.course,
           key: key
-        });
-      this.props.navigation.navigate("Sell");
-    };
+        });*/
+    console.log("List book");
+    this.props.navigation.navigate("ThreadStack");
+  };
 
-    onPressScan = () => {
+  onPressScan = () => {
+    console.log("Scan barcode");
+  };
 
-    };
-
-    onPressUpload = () => {
-
-    };
+  onPressUpload = () => {
+    console.log("Upload image");
+  };
+  render() {
     return (
       <View style={[styles.container]}>
         <View style={{ alignItems: "center" }}>
@@ -66,7 +66,7 @@ export default class Sell extends React.Component {
             source={require("../assets/barcode.png")}
           />
           <TouchableOpacity
-            style={[styles.button, { width: 165, marginBottom: 15 }]}
+            style={[styles.button, { width: 185, marginBottom: 15 }]}
             onPress={this.onPressScan}
           >
             <Text style={[styles.buttontext]}>Scan Barcode</Text>
@@ -119,7 +119,7 @@ export default class Sell extends React.Component {
               style={[styles.button, { marginLeft: 15 }]}
               onPress={this.onPressSell}
             >
-              <Text style={[styles.buttontext]}>List Item</Text>
+              <Text style={[styles.buttontext]}>List Book</Text>
             </TouchableOpacity>
           </View>
         </View>

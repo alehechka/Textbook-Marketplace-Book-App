@@ -26,8 +26,8 @@ export default class SignUp extends React.Component {
     this.state = { confirmedPassword: "" };
   }
 
-  render() {
     onPressSignup = () => {
+      console.log("Sign up2");
       if (
         testPasswords(this.state.password, this.state.confirmedPassword) ==
         false
@@ -44,7 +44,7 @@ export default class SignUp extends React.Component {
         }
       }
     };
-
+    render() {
     return (
       <View style={[styles.container]}>
         <View style={{alignItems: 'center'}}>

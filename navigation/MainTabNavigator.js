@@ -8,6 +8,7 @@ import Screen from '../Screen.js';
 
 const FeedStack = createStackNavigator({
   Feed: Screen.Feed,
+  Chat: Screen.Chat
 });
 
 FeedStack.navigationOptions = {
@@ -15,11 +16,7 @@ FeedStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-filing${focused ? '' : '-outline'}`
-          : 'md-filing'
-      }
+      name={ Platform.OS === 'ios' ? 'ios-filing' : 'md-filing' }
     />
   ),
   tabBarOptions: {
@@ -55,11 +52,7 @@ ThreadStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-barcode${focused ? '' : '-outline'}`
-          : 'md-barcode'
-      }
+      name={Platform.OS === 'ios' ? 'ios-barcode' : 'md-barcode'}
     />
   ),
   tabBarOptions: {
@@ -70,6 +63,7 @@ ThreadStack.navigationOptions = {
 
 const LoginStack = createStackNavigator({
   SingIn: Screen.SignIn,
+  SignUp: Screen.SignUp
 });
 
 LoginStack.navigationOptions = {

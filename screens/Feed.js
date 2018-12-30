@@ -11,14 +11,11 @@ import {
 import { List, ListItem, Avatar, Icon } from "react-native-elements";
 import firebase from "firebase";
 
-
 import { StackNavigator } from "react-navigation";
 
 import { _ } from "lodash";
 
 console.disableYellowBox = true;
-
-
 
 export default class Feed extends React.Component {
   static navigationOptions = {
@@ -50,12 +47,21 @@ export default class Feed extends React.Component {
       });
   };
 
+  onPressChat = () => {
+    console.log("Chat");
+    /*this.props.navigation.navigate("Chat", {
+      bookKey: key,
+      currentUID: this.state.currentUser
+    });*/
+  };
+
   render() {
     return (
       <ScrollView style={{ marginTop: 20 }}>
-        <List>
+        <List>  
           {this.state.infoList.map(item => (
             <ListItem
+              onPress={this.onPressChat}
               avatar={
                 <Avatar
                   source={require("../assets/bookDefault.png")}
@@ -64,21 +70,6 @@ export default class Feed extends React.Component {
                 />
               }
               key={item.key}
-              rightIcon={
-                this.state.currentUser != item.key && (
-                  <Button
-                    style={{ height: 100 }}
-                    title={"chat"}
-                    disable={false}
-                    onPress={() => {
-                      this.props.navigation.navigate("Chat", {
-                        bookKey: item.key,
-                        currentUID: this.state.currentUser
-                      });
-                    }}
-                  />
-                )
-              }
               title={item.title}
               subtitle={
                 <View style={{ marginLeft: 20 }}>
@@ -89,16 +80,6 @@ export default class Feed extends React.Component {
             />
           ))}
         </List>
-        <View style={{ marginTop: 20, marginBottom: 50 }}>
-          <Text style={{ alignSelf: "center" }}>Got a book to sell?</Text>
-          <Button
-            title={"Sell a book"}
-            disable={false}
-            onPress={() => {
-              this.props.navigation.navigate("Sell");
-            }}
-          />
-        </View>
       </ScrollView>
     );
   }
