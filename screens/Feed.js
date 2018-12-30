@@ -5,9 +5,10 @@ import {
   View,
   Button,
   FlatList,
-  ScrollView
+  ScrollView,
+  TextInput
 } from "react-native";
-
+import styles from "../styles/base.js";
 import { List, ListItem, Avatar, Icon } from "react-native-elements";
 import firebase from "firebase";
 
@@ -23,6 +24,7 @@ export default class Feed extends React.Component {
   };
   constructor(props) {
     super(props);
+    this.state = { search: "" };
 
     this.state = {
       infoList: [],
@@ -47,42 +49,69 @@ export default class Feed extends React.Component {
       });
   };
 
+  submitSearch = () => {
+    console.log(this.state.search);
+  };
 
   render() {
     return (
-      <ScrollView style={{ marginTop: 20 }}>
+      <ScrollView style={{ marginTop: 20, backgroundColor: "white" }}>
+        <View style={[styles.container, { marginTop: 15 }]}>
+          <TextInput
+            style={[feedstyles.textbox, { borderRadius: 50 }]}
+            placeholder={" Search"}
+            onChangeText={text => this.setState({ search: text })}
+            onSubmitEditing={this.submitSearch}
+          />
+        </View>
         <List>
           {this.state.infoList.map(item => (
             <ListItem
+              onPress={() => {
+                console.log("chat");
+                this.props.navigation.navigate("Chat", {
+                  bookKey: item.key,
+                  currentUID: this.state.currentUser
+                });
+              }}
               avatar={
                 <Avatar
+                  size={400}
+                  large
                   source={require("../assets/bookDefault.png")}
-                  xlarge
-                  onPress={() => console.log("YOTE")}
+                  onPress={() => console.log("Image pressed")}
                 />
               }
               key={item.key}
-
-              rightIcon={
-                 <Button
-                   style={{ height: 100 }}
-                   title={"chat"}
-                   disable={false}
-                   onPress={() => {
-                     this.props.navigation.navigate("Chat", {
-                       bookKey: item.key,
-                       currentUID: this.state.currentUser
-                     });
-                   }}
-                 />
-             }
-
-
-              title={item.title}
+              title={
+                <View style={[feedstyles.right]}>
+                  <Text
+                    ellipsizeMode={"tail"}
+                    numberOfLines={1}
+                    style={[feedstyles.title]}
+                  >
+                    {item.title}
+                  </Text>
+                </View>
+              }
               subtitle={
-                <View style={{ marginLeft: 20 }}>
-                  <Text>{item.category}</Text>
-                  <Text>${item.price}</Text>
+                <View>
+                  <View style={[feedstyles.right]}>
+                    <Text>ISBN: {item.isbn}</Text>
+                    <Text>Author | Year</Text>
+                    <Text />
+                  </View>
+                  <View style={[feedstyles.row]}>
+                    <View style={[feedstyles.left, { flex: 1 }]}>
+                      <Text style={[feedstyles.price]}>${item.price}</Text>
+                    </View>
+                    <View style={[styles.right, { flex: 1 }]}>
+                      <Text style={[feedstyles.majorCourse]}>{item.major}</Text>
+                      <Text style={[feedstyles.majorCourse]}>
+                        {item.course}
+                      </Text>
+                    </View>
+                  </View>
                 </View>
               }
             />
@@ -92,3 +121,34 @@ export default class Feed extends React.Component {
     );
   }
 }
+
+const feedstyles = StyleSheet.create({
+  right: {
+    alignItems: "flex-end"
+  },
+  left: {
+    marginLeft: 10
+  },
+  row: {
+    flexDirection: "row"
+  },
+  textbox: {
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: 20,
+    marginLeft: 10
+  },
+  price: {
+    color: "darkgray",
+    fontSize: 20
+  },
+  majorCourse: {
+    fontSize: 12,
+    color: "gray",
+    textAlign: "right"
+  }
+});
