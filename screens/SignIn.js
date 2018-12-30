@@ -57,11 +57,11 @@ export default class LoginScreen extends React.Component {
   render() {
     return (
       <View style={[styles.container]}>
-      <View style={{alignItems: 'center'}}>
-        <Image
-          style={[styles.icon]}
-          source={require("../assets/tempicon.png")}
-        />
+        <View style={{ alignItems: "center" }}>
+          <Image
+            style={[styles.icon]}
+            source={require("../assets/tempicon.png")}
+          />
         </View>
         <Text style={[styles.abovetext]}>Email</Text>
         <TextInput
@@ -71,18 +71,23 @@ export default class LoginScreen extends React.Component {
         />
         <Text style={[styles.abovetext]}>Password</Text>
         <TextInput
-          style={[styles.textbox, {marginBottom: 25}]}
+          style={[styles.textbox, { marginBottom: 25 }]}
           placeholder={" Required: lower, upper, number, symbol"}
           password={true}
           secureTextEntry={true}
           onChangeText={text => this.setState({ password: text })}
         />
-        <View style={{alignItems: 'center'}}>
-          <TouchableOpacity style={[styles.button, {marginBottom: 25}]} 
-            onPress={this.onPressLogin}>
+        <View style={{ alignItems: "center" }}>
+          <TouchableOpacity
+            style={[styles.button, { marginBottom: 25 }]}
+            onPress={this.onPressLogin}
+          >
             <Text style={[styles.buttontext]}>Login</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button]} onPress={this.onPressSignup}>
+          <TouchableOpacity
+            style={[styles.button]}
+            onPress={this.onPressSignup}
+          >
             <Text style={[styles.buttontext]}>Sign up</Text>
           </TouchableOpacity>
         </View>
