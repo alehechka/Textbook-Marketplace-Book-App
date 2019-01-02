@@ -11,7 +11,7 @@ import {
   Image,
   KeyboardAvoidingView
 } from "react-native";
-import styles from "../styles/base.js";
+import { styles } from "../styles/base.js";
 import { createStackNavigator } from "react-navigation";
 import navigation from "react-navigation";
 import firebase from "firebase";

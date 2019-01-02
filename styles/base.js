@@ -1,7 +1,7 @@
 import React from "react";
 import {  StyleSheet } from "react-native";
 import Colors from '../constants/Colors';
-export default styles = StyleSheet.create({
+export const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: 'white',
@@ -66,5 +66,36 @@ export default styles = StyleSheet.create({
       fontSize: 25,
       fontWeight: "bold",
       color: "white"
+    }
+  });
+
+  export const feedstyles = StyleSheet.create({
+    right: {
+      alignItems: "flex-end"
+    },
+    left: {
+      marginLeft: 10
+    },
+    row: {
+      flexDirection: "row"
+    },
+    textbox: {
+      height: 40,
+      borderColor: "gray",
+      borderWidth: 1
+    },
+    title: {
+      fontWeight: "bold",
+      fontSize: 20,
+      marginLeft: 10
+    },
+    price: {
+      color: "darkgray",
+      fontSize: 20
+    },
+    majorCourse: {
+      fontSize: 12,
+      color: "gray",
+      textAlign: "right"
     }
   });

@@ -6,11 +6,11 @@ import {
   TextInput,
   Alert,
   TouchableOpacity,
-  Image
+  Image,
 } from "react-native";
 import { createStackNavigator } from "react-navigation";
 import { Card, ListItem, Button } from 'react-native-elements'
-import styles from "../styles/base.js";
+import { styles } from "../styles/base.js";
 
 const users = [
     {

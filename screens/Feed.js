@@ -6,10 +6,12 @@ import {
   Button,
   FlatList,
   ScrollView,
-  TextInput
+  TextInput, 
+  Modal
 } from "react-native";
-import styles from "../styles/base.js";
+import { styles, feedstyles } from "../styles/base.js";
 import { List, ListItem, Avatar, Icon } from "react-native-elements";
+import ImageViewer from 'react-native-image-zoom-viewer';
 import firebase from "firebase";
 
 import { StackNavigator } from "react-navigation";
@@ -53,6 +55,15 @@ export default class Feed extends React.Component {
     console.log(this.state.search);
   };
 
+  viewImage() {
+    console.log("View image");
+    return (
+        <Modal visible={true} transparent={true}>
+            <ImageViewer imageUrls={["../assets/bookDefault.png"]}/>
+        </Modal>
+    )
+}
+
   render() {
     return (
       <ScrollView style={{ marginTop: 20, backgroundColor: "white" }}>
@@ -76,10 +87,9 @@ export default class Feed extends React.Component {
               }}
               avatar={
                 <Avatar
-                  size={400}
-                  large
+                  width={100}
                   source={require("../assets/bookDefault.png")}
-                  onPress={() => console.log("Image pressed")}
+                  onPress={this.viewImage}
                 />
               }
               key={item.key}
@@ -121,34 +131,3 @@ export default class Feed extends React.Component {
     );
   }
 }
-
-const feedstyles = StyleSheet.create({
-  right: {
-    alignItems: "flex-end"
-  },
-  left: {
-    marginLeft: 10
-  },
-  row: {
-    flexDirection: "row"
-  },
-  textbox: {
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1
-  },
-  title: {
-    fontWeight: "bold",
-    fontSize: 20,
-    marginLeft: 10
-  },
-  price: {
-    color: "darkgray",
-    fontSize: 20
-  },
-  majorCourse: {
-    fontSize: 12,
-    color: "gray",
-    textAlign: "right"
-  }
-});

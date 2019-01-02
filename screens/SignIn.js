@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { createStackNavigator } from "react-navigation";
 import firebase from "firebase";
-import styles from "../styles/base.js";
+import { styles } from "../styles/base.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDr4YvpZXX752crkGU0ESjHTMm8yHAFi78",

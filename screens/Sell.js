@@ -11,7 +11,7 @@ import {
   Image,
   KeyboardAvoidingView
 } from "react-native";
-import styles from "../styles/base.js";
+import { styles } from "../styles/base.js";
 import { List, ListItem, Avatar } from "react-native-elements";
 import firebase from "firebase";
 
