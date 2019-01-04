@@ -35,7 +35,7 @@ export default class SignUp extends React.Component {
       Alert.alert("Your passwords do not match, please try again");
     } else {
       if (testEmail(this.state.email) == -1) {
-        Alert.alert("Doesn't contain @unomaha.edu, please try a correct email");
+        Alert.alert("Not a valid email, please use college email.");
       } else {
         createAccount(this.state.email, this.state.confirmedPassword);
         this.props.navigation.navigate("Email");
@@ -62,7 +62,7 @@ export default class SignUp extends React.Component {
           <Text style={[styles.abovetext]}>Password</Text>
           <TextInput
             style={[styles.textbox]}
-            placeholder={" Required: lower, upper, number, symbol"}
+            placeholder={" At least 8 characters"}
             password={true}
             secureTextEntry={true}
             onChangeText={text => this.setState({ password: text })}

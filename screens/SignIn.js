@@ -75,7 +75,7 @@ export default class LoginScreen extends React.Component {
           <Text style={[styles.abovetext]}>Password</Text>
           <TextInput
             style={[styles.textbox, { marginBottom: 25 }]}
-            placeholder={" Required: lower, upper, number, symbol"}
+            placeholder={""}
             password={true}
             secureTextEntry={true}
             onChangeText={text => this.setState({ password: text })}
@@ -108,6 +108,9 @@ function signIn(email, password) {
       //Handle errors here
       var errorCode = error.code;
       var errorMessage = error.message;
+      if(error != null) {
+        Alert.alert("Email or password is incorrect.");
+      }
       console.log(error);
     });
 }

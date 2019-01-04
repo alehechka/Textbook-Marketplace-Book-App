@@ -6,5 +6,6 @@ import SignIn from './screens/SignIn';
 import SignUp from './screens/SignUp';
 import emailVerify from './screens/emailVerify';
 import Threads from './screens/Threads';
+import Profile from './screens/Profile';
 
-export default {Chat, Feed, Sell, SignIn, SignUp, emailVerify, Threads};
+export default {Chat, Feed, Sell, SignIn, SignUp, emailVerify, Threads, Profile};

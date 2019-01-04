@@ -61,12 +61,11 @@ ThreadStack.navigationOptions = {
   },
 };
 
-const LoginStack = createStackNavigator({
-  SingIn: Screen.SignIn,
-  SignUp: Screen.SignUp
+const ProfileStack = createStackNavigator({
+  Profile: Screen.Profile
 });
 
-LoginStack.navigationOptions = {
+ProfileStack.navigationOptions = {
   title: 'Profile',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -84,5 +83,5 @@ export default createBottomTabNavigator({
   FeedStack,
   SellStack,
   ThreadStack,
-  LoginStack,
+  ProfileStack,
 });
