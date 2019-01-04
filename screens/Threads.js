@@ -1,15 +1,8 @@
 import React from "react";
 import {
-  StyleSheet,
-  Text,
   View,
-  TextInput,
-  Alert,
-  TouchableOpacity,
-  Image,
 } from "react-native";
-import { createStackNavigator } from "react-navigation";
-import { Card, ListItem, Button } from 'react-native-elements'
+import { Card, ListItem, } from 'react-native-elements'
 import { styles } from "../styles/base.js";
 
 const users = [
@@ -27,7 +20,7 @@ const users = [
 
 export default class ThreadScreen extends React.Component {
   static navigationOptions = {
-    header: null
+    //header: null
   };
   render() {
     onPressThreads = () => {

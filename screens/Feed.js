@@ -1,21 +1,15 @@
 import React from "react";
 import {
-  StyleSheet,
   Text,
   View,
-  Button,
-  FlatList,
   ScrollView,
   TextInput, 
   Modal
 } from "react-native";
 import { styles, feedstyles } from "../styles/base.js";
-import { List, ListItem, Avatar, Icon } from "react-native-elements";
+import { List, ListItem, Avatar, } from "react-native-elements";
 import ImageViewer from 'react-native-image-zoom-viewer';
 import firebase from "firebase";
-
-import { StackNavigator } from "react-navigation";
-
 import { _ } from "lodash";
 
 console.disableYellowBox = true;

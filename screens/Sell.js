@@ -9,11 +9,7 @@ import {
   Alert
 } from "react-native";
 import { styles } from "../styles/base.js";
-import { List, ListItem, Avatar } from "react-native-elements";
 import firebase from "firebase";
-
-import { createStackNavigator } from "react-navigation";
-
 import { _ } from "lodash";
 
 console.disableYellowBox = true;

@@ -1,21 +1,12 @@
 import React from "react";
 import {
   StyleSheet,
-  Text,
   View,
   Button,
-  FlatList,
-  ScrollView,
   ActivityIndicator,
   TextInput
 } from "react-native";
-
-import { List, ListItem, Avatar, Icon } from "react-native-elements";
 import firebase from "firebase";
-
-
-import { StackNavigator } from "react-navigation";
-
 import { _ } from "lodash";
 
 console.disableYellowBox = true;
@@ -23,6 +14,7 @@ console.disableYellowBox = true;
 export default class Chat extends React.Component {
   static navigationOptions = {
     //header: null
+    //Add header to show other user's name or book that is being sold
   };
   constructor(props) {
     super(props);
