@@ -27,6 +27,7 @@ FeedStack.navigationOptions = {
 
 const SellStack = createStackNavigator({
   Sell: Screen.Sell,
+  barcode: Screen.barcode,
 });
 
 SellStack.navigationOptions = {

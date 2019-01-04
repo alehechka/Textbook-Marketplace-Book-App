@@ -1,15 +1,12 @@
 import React from "react";
 import {
-  StyleSheet,
   Text,
   View,
-  Button,
-  FlatList,
-  ScrollView,
   TextInput,
   TouchableOpacity,
   Image,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Alert
 } from "react-native";
 import { styles } from "../styles/base.js";
 import { List, ListItem, Avatar } from "react-native-elements";
@@ -52,7 +49,7 @@ export default class Sell extends React.Component {
   };
 
   onPressScan = () => {
-    console.log("Scan barcode");
+    this.props.navigation.navigate('barcode');
   };
 
   onPressUpload = () => {

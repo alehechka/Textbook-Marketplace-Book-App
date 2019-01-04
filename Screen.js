@@ -8,4 +8,6 @@ import emailVerify from './screens/emailVerify';
 import Threads from './screens/Threads';
 import Profile from './screens/Profile';
 
-export default {Chat, Feed, Sell, SignIn, SignUp, emailVerify, Threads, Profile};
+import barcode from './components/barcode';
+
+export default {Chat, Feed, Sell, SignIn, SignUp, emailVerify, Threads, Profile, barcode};
