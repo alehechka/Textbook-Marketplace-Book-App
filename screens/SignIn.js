@@ -108,7 +108,7 @@ function signIn(email, password) {
       //Handle errors here
       var errorCode = error.code;
       var errorMessage = error.message;
-      if(error != null) {
+      if(errorCode != null) {
         Alert.alert("Email or password is incorrect.");
       }
       console.log(error);
