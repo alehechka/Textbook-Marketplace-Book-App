@@ -23,5 +23,3 @@ export default {
     Profile,
     barcode
 };
-
-export default {Chat, Feed, Sell, SignIn, SignUp, emailVerify, Threads, Profile, barcode};

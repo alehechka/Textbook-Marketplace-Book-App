@@ -3,16 +3,25 @@ import {
   Text,
   View,
   ScrollView,
-  TextInput, 
+  TextInput,
   Modal
 } from "react-native";
 import { styles, feedstyles } from "../styles/base.js";
+import Layout from '../constants/Layout';
 import { List, ListItem, Avatar, } from "react-native-elements";
-import ImageViewer from 'react-native-image-zoom-viewer';
+import ImageView from 'react-native-image-view';
 import firebase from "firebase";
 import { _ } from "lodash";
 
 console.disableYellowBox = true;
+
+const images = [
+  {
+      source: require('../assets/bookDefault.png'),
+      width: Layout.window.width,
+      height: Layout.window.height
+  },
+];
 
 export default class Feed extends React.Component {
   static navigationOptions = {
@@ -20,9 +29,9 @@ export default class Feed extends React.Component {
   };
   constructor(props) {
     super(props);
-    this.state = { search: "" };
-
     this.state = {
+      search: "",
+      isImageViewVisible: false,
       infoList: [],
       loading: true,
       currentUser: "-LUwfgY-M3fTZd_Rxi0z" //THIS IS DUNGOS USER ID. NEED A WAY TO SET GLOBAL USER ID WHEN A USER SIGNS IN AND MAINTAIN IT. I think firebase has a function
@@ -49,18 +58,14 @@ export default class Feed extends React.Component {
     console.log(this.state.search);
   };
 
-  viewImage() {
+  viewImage = () => {
     console.log("View image");
-    return (
-        <Modal visible={true} transparent={true}>
-            <ImageViewer imageUrls={["../assets/bookDefault.png"]}/>
-        </Modal>
-    )
-}
+    this.setState({isImageViewVisible: true});
+  }
 
   render() {
     return (
-      <ScrollView style={{ marginTop: 20, backgroundColor: "white" }}>
+      <ScrollView style={{ marginTop: 25, backgroundColor: "white" }}>
         <View style={[styles.container, { marginTop: 15 }]}>
           <TextInput
             style={[feedstyles.textbox, { borderRadius: 50 }]}
@@ -121,6 +126,13 @@ export default class Feed extends React.Component {
             />
           ))}
         </List>
+        <ImageView
+          glideAlways
+          images={images}
+          animationType="fade"
+          isVisible={this.state.isImageViewVisible}
+          onClose={() => this.setState({ isImageViewVisible: false })}
+        />
       </ScrollView>
     );
   }

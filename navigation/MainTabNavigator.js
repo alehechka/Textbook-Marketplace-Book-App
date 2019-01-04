@@ -1,9 +1,9 @@
 import React from 'react';
 import { Platform } from 'react-native';
-import { 
-  createStackNavigator, 
-  createBottomTabNavigator, 
-  createMaterialTopTabNavigator 
+import {
+  createStackNavigator,
+  createBottomTabNavigator,
+  createMaterialTopTabNavigator
 } from 'react-navigation';
 import Colors from '../constants/Colors';
 import TabBarIcon from '../components/TabBarIcon';
@@ -19,7 +19,7 @@ FeedStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={ Platform.OS === 'ios' ? 'ios-filing' : 'md-filing' }
+      name={Platform.OS === 'ios' ? 'ios-filing' : 'md-filing'}
     />
   ),
   tabBarOptions: {
@@ -52,24 +52,7 @@ const BuyingStack = createStackNavigator({
 });
 
 BuyingStack.navigationOptions = {
-  title: 'Buying'
-};
-
-const SellingStack = createStackNavigator({
-  Selling: Screen.Selling
-});
-SellingStack.navigationOptions = {
-  title: 'Selling'
-};
-
-const BuySellStack = createMaterialTopTabNavigator({
-  Buying: BuyingStack,
-  Selling: SellingStack,
-});
-
-BuySellStack.navigationOptions = {
-  tabBarPosition: 'top',
-  header: null,
+  title: 'Buying',
   tabBarOptions: {
     activeTintColor: Colors.tintColor,
     inactiveTintColor: Colors.tabIconDefault,
@@ -77,11 +60,37 @@ BuySellStack.navigationOptions = {
       marginTop: 25,
       backgroundColor: 'white'
     },
-    tabStyle: {
-      height: 100,
-      backgroundColor: 'white'
-    }
+    indicatorStyle: {
+      backgroundColor: Colors.tintColor,
+    },
   }
+};
+
+const SellingStack = createStackNavigator({
+  Selling: Screen.Selling
+});
+SellingStack.navigationOptions = {
+  title: 'Selling',
+  tabBarOptions: {
+    activeTintColor: Colors.tintColor,
+    inactiveTintColor: Colors.tabIconDefault,
+    style: {
+      marginTop: 25,
+      backgroundColor: 'white'
+    },
+    indicatorStyle: {
+      backgroundColor: Colors.tintColor,
+    },
+  }
+};
+
+const BuySellStack = createMaterialTopTabNavigator({
+  Buying: BuyingStack,
+  Selling: SellingStack,
+});
+BuySellStack.navigationOptions = {
+  tabBarPosition: 'top',
+  header: null,
 };
 
 const ThreadStack = createStackNavigator({

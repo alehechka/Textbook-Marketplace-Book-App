@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Image,
   KeyboardAvoidingView,
-  Alert
 } from "react-native";
 import { styles } from "../styles/base.js";
 import firebase from "firebase";
