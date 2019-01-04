@@ -1,22 +1,14 @@
 import React from "react";
 import {
-  StyleSheet,
   Text,
   View,
-  Button,
-  FlatList,
-  ScrollView,
   TextInput,
   TouchableOpacity,
   Image,
   KeyboardAvoidingView
 } from "react-native";
 import { styles } from "../styles/base.js";
-import { List, ListItem, Avatar } from "react-native-elements";
 import firebase from "firebase";
-
-import { createStackNavigator } from "react-navigation";
-
 import { _ } from "lodash";
 
 console.disableYellowBox = true;
@@ -53,6 +45,7 @@ export default class Sell extends React.Component {
 
   onPressScan = () => {
     console.log("Scan barcode");
+    this.props.navigation.navigate('barcode');
   };
 
   onPressUpload = () => {

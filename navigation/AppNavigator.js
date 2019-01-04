@@ -6,12 +6,11 @@ import MainTabNavigator from './MainTabNavigator';
 
 const LoginStack = createStackNavigator({
   SignIn: Screen.SignIn,
-  SignUp: Screen.SignUp
+  SignUp: Screen.SignUp,
+  Email: Screen.EmailVerify
 });
 
 export default createSwitchNavigator({
-  // You could add another route here for authentication.
-  // Read more at https://reactnavigation.org/docs/en/auth-flow.html
   Login: LoginStack,
   Main: MainTabNavigator,
 });

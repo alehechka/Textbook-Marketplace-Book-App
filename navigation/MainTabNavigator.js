@@ -1,7 +1,10 @@
 import React from 'react';
 import { Platform } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
-
+import { 
+  createStackNavigator, 
+  createBottomTabNavigator, 
+  createMaterialTopTabNavigator 
+} from 'react-navigation';
 import Colors from '../constants/Colors';
 import TabBarIcon from '../components/TabBarIcon';
 import Screen from '../Screen.js';
@@ -27,6 +30,7 @@ FeedStack.navigationOptions = {
 
 const SellStack = createStackNavigator({
   Sell: Screen.Sell,
+  barcode: Screen.barcode
 });
 
 SellStack.navigationOptions = {
@@ -43,7 +47,45 @@ SellStack.navigationOptions = {
   },
 };
 
+const BuyingStack = createStackNavigator({
+  Buying: Screen.Buying
+});
+
+BuyingStack.navigationOptions = {
+  title: 'Buying'
+};
+
+const SellingStack = createStackNavigator({
+  Selling: Screen.Selling
+});
+SellingStack.navigationOptions = {
+  title: 'Selling'
+};
+
+const BuySellStack = createMaterialTopTabNavigator({
+  Buying: BuyingStack,
+  Selling: SellingStack,
+});
+
+BuySellStack.navigationOptions = {
+  tabBarPosition: 'top',
+  header: null,
+  tabBarOptions: {
+    activeTintColor: Colors.tintColor,
+    inactiveTintColor: Colors.tabIconDefault,
+    style: {
+      marginTop: 25,
+      backgroundColor: 'white'
+    },
+    tabStyle: {
+      height: 100,
+      backgroundColor: 'white'
+    }
+  }
+};
+
 const ThreadStack = createStackNavigator({
+  BuySell: BuySellStack,
   Threads: Screen.Threads,
 });
 

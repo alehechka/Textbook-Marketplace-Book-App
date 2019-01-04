@@ -1,19 +1,14 @@
 import React from "react";
 import {
-  StyleSheet,
   Text,
   View,
   TextInput,
-  Button,
-  string,
   Alert,
   TouchableOpacity,
   Image,
   KeyboardAvoidingView
 } from "react-native";
 import { styles } from "../styles/base.js";
-import { createStackNavigator } from "react-navigation";
-import navigation from "react-navigation";
 import firebase from "firebase";
 
 export default class SignUp extends React.Component {

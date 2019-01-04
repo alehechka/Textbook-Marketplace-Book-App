@@ -1,29 +1,27 @@
 import React from "react";
 import {
-    Text,
     View,
-    TouchableOpacity,
+    Text,
+    TouchableOpacity
 } from "react-native";
 import { styles } from "../styles/base.js";
-import firebase from "firebase";
-
-export default class ProfileScreen extends React.Component {
+export default class ThreadScreen extends React.Component {
     static navigationOptions = {
         header: null
     };
-    onPressSignout = () => {
-        console.log("Sign out");
-        firebase.auth().signOut();
-        this.props.navigation.navigate("SignIn");
+    onPressChat = () => {
+        console.log("Chat");
+        this.props.navigation.navigate("Threads");
     };
     render() {
         return (
             <View style={[styles.container]}>
+                <Text>Buying</Text>
                 <TouchableOpacity
                     style={[styles.button]}
-                    onPress={this.onPressSignout}
+                    onPress={this.onPressChat}
                 >
-                    <Text style={[styles.buttontext]}>Logout</Text>
+                    <Text style={[styles.buttontext]}>Chats</Text>
                 </TouchableOpacity>
             </View>
         );

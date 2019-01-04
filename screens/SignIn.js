@@ -1,16 +1,13 @@
 import React from "react";
 import {
-  StyleSheet,
   Text,
   View,
   TextInput,
-  Button,
   Alert,
   TouchableOpacity,
   Image,
   KeyboardAvoidingView
 } from "react-native";
-import { createStackNavigator } from "react-navigation";
 import firebase from "firebase";
 import { styles } from "../styles/base.js";
 
