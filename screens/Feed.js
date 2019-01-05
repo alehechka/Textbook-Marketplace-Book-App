@@ -4,7 +4,6 @@ import {
   View,
   ScrollView,
   TextInput,
-  Modal
 } from "react-native";
 import { styles, feedstyles } from "../styles/base.js";
 import Layout from '../constants/Layout';
@@ -49,7 +48,6 @@ export default class Feed extends React.Component {
       .on("value", snapshot => {
         let books = snapshot.val();
         let infoList = Object.values(books);
-        console.log(infoList);
         this.setState({ infoList, loading: false });
       });
   };
