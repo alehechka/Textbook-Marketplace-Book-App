@@ -31,11 +31,11 @@ export default class Sell extends React.Component {
       price: null,
       major: null,
       course: null,
-      authors: [],
-      year: null,
-      edition: null,
-      smallThumbnail: null,
-      thumbnail: null,
+      //authors: [],
+      //year: null,
+      //edition: null,
+      //smallThumbnail: null,
+      //thumbnail: null,
       book: null,
       scanBarcode: false,
     };
@@ -56,14 +56,15 @@ export default class Sell extends React.Component {
         price: this.state.price,
         major: this.state.major,
         course: this.state.course,
-        author: this.state.authors[0],
-        year: this.state.year,
-        edition: this.state.edition,
-        smallThumbnail: this.state.smallThumbnail,
-        thumbnail: this.state.thumbnail,
+        //author: this.state.authors[0],
+        //year: this.state.year,
+        //edition: this.state.edition,
+        //smallThumbnail: this.state.smallThumbnail,
+        //thumbnail: this.state.thumbnail,
         key: key
       });
-    console.log("List book");
+    console.log("List book:");
+    console.log(this.state.title, this.state.isbn, this.state.major, this.state.course, this.state.price);
     this.props.navigation.navigate("Selling");
   };
 
@@ -167,7 +168,8 @@ export default class Sell extends React.Component {
             <TextInput
               style={[styles.textbox]}
               placeholder={""}
-              onEndEditing={text => this.setState({ title: text })}
+              value={this.state.title}
+              onChangeText={text => this.setState({ title: text })}
             />
             <Text style={[styles.abovetext]}>ISBN</Text>
             <TextInput
@@ -175,7 +177,7 @@ export default class Sell extends React.Component {
               placeholder={""}
               value={this.state.isbn}
               keyboardType="numeric"
-              onEndEditing={text => this.setState({ isbn: text })}
+              onChangeText={text => this.setState({ isbn: text })}
             />
             <View style={[styles.row]}>
               <Text style={[styles.abovetext]}>Major</Text>
@@ -185,12 +187,14 @@ export default class Sell extends React.Component {
               <TextInput
                 style={[styles.halfbox, { marginRight: 15 }]}
                 placeholder={""}
-                onEndEditing={text => this.setState({ major: text })}
+                value={this.state.major}
+                onChangeText={text => this.setState({ major: text })}
               />
               <TextInput
                 style={[styles.halfbox, { marginLeft: 15 }]}
                 placeholder={""}
-                onEndEditing={text => this.setState({ course: text })}
+                value={this.state.course}
+                onChangeText={text => this.setState({ course: text })}
               />
             </View>
             <View style={[styles.row]}>
@@ -207,7 +211,8 @@ export default class Sell extends React.Component {
                   style={[styles.halfbox, { marginLeft: 15 }]}
                   placeholder={""}
                   keyboardType="numeric"
-                  onEndEditing={text => this.setState({ price: text })}
+                  value={this.state.price}
+                  onChangeText={text => this.setState({ price: text })}
                 />
 
                 <TouchableOpacity

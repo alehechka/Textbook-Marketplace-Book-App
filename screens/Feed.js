@@ -16,9 +16,9 @@ console.disableYellowBox = true;
 
 const images = [
   {
-      source: require('../assets/bookDefault.png'),
-      width: Layout.window.width,
-      height: Layout.window.height
+    source: require('../assets/bookDefault.png'),
+    width: Layout.window.width,
+    height: Layout.window.height
   },
 ];
 
@@ -58,13 +58,17 @@ export default class Feed extends React.Component {
 
   viewImage = () => {
     console.log("View image");
-    this.setState({isImageViewVisible: true});
+    this.setState({ isImageViewVisible: true });
   };
 
   truncateAuthorName = (author) => {
-    const result = author;
-    const resultArray = result.split(" ");
-    return resultArray[resultArray.length - 1];
+    if (author == null) {
+      return "Author"
+    } else {
+      const result = author;
+      const resultArray = result.split(" ");
+      return resultArray[resultArray.length - 1];
+    }
   };
 
   render() {
