@@ -8,7 +8,6 @@ import Threads from './screens/Threads';
 import Profile from './screens/Profile';
 import Buying from './screens/Buying';
 import Selling from './screens/Selling';
-import barcode from './components/barcode';
 
 export default {
     Chat, 
@@ -21,5 +20,4 @@ export default {
     Selling, 
     Threads, 
     Profile,
-    barcode
 };

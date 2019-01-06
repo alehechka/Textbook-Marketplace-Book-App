@@ -59,7 +59,13 @@ export default class Feed extends React.Component {
   viewImage = () => {
     console.log("View image");
     this.setState({isImageViewVisible: true});
-  }
+  };
+
+  truncateAuthorName = (author) => {
+    const result = author;
+    const resultArray = result.split(" ");
+    return resultArray[resultArray.length - 1];
+  };
 
   render() {
     return (
@@ -105,7 +111,7 @@ export default class Feed extends React.Component {
                 <View>
                   <View style={[feedstyles.right]}>
                     <Text>ISBN: {item.isbn}</Text>
-                    <Text>Author | Year</Text>
+                    <Text>{this.truncateAuthorName(item.author)} | {item.year}</Text>
                     <Text />
                   </View>
                   <View style={[feedstyles.row]}>

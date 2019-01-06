@@ -12,6 +12,7 @@ import { styles } from "../styles/base.js";
 import firebase from "firebase";
 import { _ } from "lodash";
 import { BarCodeScanner, Permissions } from 'expo';
+var isbn = require('node-isbn');
 
 console.disableYellowBox = true;
 
@@ -35,10 +36,12 @@ export default class Sell extends React.Component {
       edition: null,
       smallThumbnail: null,
       thumbnail: null,
+      book: null,
       scanBarcode: false,
     };
   }
   onPressSell = () => {
+    this._getBookInformation();
     let result = firebase
       .database()
       .ref("books/")
@@ -53,6 +56,11 @@ export default class Sell extends React.Component {
         price: this.state.price,
         major: this.state.major,
         course: this.state.course,
+        author: this.state.authors[0],
+        year: this.state.year,
+        edition: this.state.edition,
+        smallThumbnail: this.state.smallThumbnail,
+        thumbnail: this.state.thumbnail,
         key: key
       });
     console.log("List book");
@@ -74,8 +82,21 @@ export default class Sell extends React.Component {
 
   _handleIsbnRead = data => {
     console.log(data.data);
-    this.setState({isbn: data.data});
+    this.setState({ isbn: data.data });
+    this._getBookInformation();
     this.setState({ scanBarcode: false });
+  };
+
+  _getBookInformation = () => {
+    this.setState({
+      book: isbn.resolve(this.state.isbn, function (err, book) {
+        if (err) {
+          console.log('Book not found', err);
+        } else {
+          console.log('Book found', book);
+        }
+      })
+    });
   };
 
   onPressReturn = () => {
@@ -90,20 +111,20 @@ export default class Sell extends React.Component {
     if (this.state.scanBarcode == true) {
       if (this.state.hasCameraPermission === false) {
         return (
-          <View style={[styles.container, {alignItems: 'center'}]}>
-            <Text style={[styles.abovetextVerify, {fontSize: 20}]}>Camera permission is not granted</Text>
+          <View style={[styles.container, { alignItems: 'center' }]}>
+            <Text style={[styles.abovetextVerify, { fontSize: 20 }]}>Camera permission is not granted</Text>
             <TouchableOpacity
-                style={[styles.button, { width: 185, marginBottom: 15 }]}
-                onPress={this._requestCameraPermission}
-              >
-                <Text style={[styles.buttontext]}>Request again</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.button, { marginBottom: 15 }]}
-                onPress={this.onPressReturn}
-              >
-                <Text style={[styles.buttontext]}>Return</Text>
-              </TouchableOpacity>
+              style={[styles.button, { width: 185, marginBottom: 15 }]}
+              onPress={this._requestCameraPermission}
+            >
+              <Text style={[styles.buttontext]}>Request again</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, { marginBottom: 15 }]}
+              onPress={this.onPressReturn}
+            >
+              <Text style={[styles.buttontext]}>Return</Text>
+            </TouchableOpacity>
           </View>
         );
       }
@@ -146,14 +167,15 @@ export default class Sell extends React.Component {
             <TextInput
               style={[styles.textbox]}
               placeholder={""}
-              onChangeText={text => this.setState({ title: text })}
+              onEndEditing={text => this.setState({ title: text })}
             />
             <Text style={[styles.abovetext]}>ISBN</Text>
             <TextInput
               style={[styles.textbox]}
-              placeholder={this.state.isbn}
+              placeholder={""}
+              value={this.state.isbn}
               keyboardType="numeric"
-              onChangeText={text => this.setState({ isbn: text })}
+              onEndEditing={text => this.setState({ isbn: text })}
             />
             <View style={[styles.row]}>
               <Text style={[styles.abovetext]}>Major</Text>
@@ -163,12 +185,12 @@ export default class Sell extends React.Component {
               <TextInput
                 style={[styles.halfbox, { marginRight: 15 }]}
                 placeholder={""}
-                onChangeText={text => this.setState({ major: text })}
+                onEndEditing={text => this.setState({ major: text })}
               />
               <TextInput
                 style={[styles.halfbox, { marginLeft: 15 }]}
                 placeholder={""}
-                onChangeText={text => this.setState({ course: text })}
+                onEndEditing={text => this.setState({ course: text })}
               />
             </View>
             <View style={[styles.row]}>
@@ -185,7 +207,7 @@ export default class Sell extends React.Component {
                   style={[styles.halfbox, { marginLeft: 15 }]}
                   placeholder={""}
                   keyboardType="numeric"
-                  onChangeText={text => this.setState({ price: text })}
+                  onEndEditing={text => this.setState({ price: text })}
                 />
 
                 <TouchableOpacity
