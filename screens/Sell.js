@@ -31,17 +31,20 @@ export default class Sell extends React.Component {
       price: null,
       major: null,
       course: null,
-      //authors: [],
-      //year: null,
-      //edition: null,
-      //smallThumbnail: null,
-      //thumbnail: null,
+      authors: [],
+      year: null,
+      smallThumbnail: null,
+      thumbnail: null,
       book: null,
       scanBarcode: false,
     };
   }
+
+  componentDidMount() {
+  }
+
   onPressSell = () => {
-    this._getBookInformation();
+    this._getBookInformation(this.state.isbn);
     let result = firebase
       .database()
       .ref("books/")
@@ -56,11 +59,10 @@ export default class Sell extends React.Component {
         price: this.state.price,
         major: this.state.major,
         course: this.state.course,
-        //author: this.state.authors[0],
-        //year: this.state.year,
-        //edition: this.state.edition,
-        //smallThumbnail: this.state.smallThumbnail,
-        //thumbnail: this.state.thumbnail,
+        author: this.state.authors[0],
+        year: this.state.year,
+        smallThumbnail: this.state.smallThumbnail,
+        thumbnail: this.state.thumbnail,
         key: key
       });
     console.log("List book:");
@@ -84,20 +86,23 @@ export default class Sell extends React.Component {
   _handleIsbnRead = data => {
     console.log(data.data);
     this.setState({ isbn: data.data });
-    this._getBookInformation();
+    this._getBookInformation(this.state.isbn);
     this.setState({ scanBarcode: false });
   };
 
-  _getBookInformation = () => {
-    this.setState({
-      book: isbn.resolve(this.state.isbn, function (err, book) {
-        if (err) {
-          console.log('Book not found', err);
-        } else {
-          console.log('Book found', book);
-        }
-      })
+  _getBookInformation = (isbnBook) => {
+    isbn.resolve(isbnBook).then(returnBook => {
+      this.setState({book: returnBook});
+    }).catch(err => {
+      console.error('ISBN Read error: ' + err);
     });
+    this.setState({title: this.state.book.title + ': ' + this.state.book.subtitle});
+    this.setState({authors: this.state.book.authors});
+    this.setState({year: this.state.book.publishedDate});
+    this.setState({smallThumbnail: this.state.book.imageLinks.smallThumbnail});
+    this.setState({thumbnail: this.state.book.imageLinks.thumbnail});
+    console.log(this.state.title)
+
   };
 
   onPressReturn = () => {

@@ -95,7 +95,7 @@ export default class Feed extends React.Component {
               avatar={
                 <Avatar
                   width={100}
-                  source={require("../assets/bookDefault.png")}
+                  source={{uri: item.thumbnail}}
                   onPress={this.viewImage}
                 />
               }
