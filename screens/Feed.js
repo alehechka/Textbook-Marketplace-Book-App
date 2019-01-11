@@ -1,26 +1,12 @@
 import React from "react";
-import {
-  Text,
-  View,
-  ScrollView,
-  TextInput,
-} from "react-native";
+import { Text, View, ScrollView, TextInput } from "react-native";
 import { styles, feedstyles } from "../styles/base.js";
-import Layout from '../constants/Layout';
-import { List, ListItem, Avatar, } from "react-native-elements";
-import ImageView from 'react-native-image-view';
+import { List, ListItem, Avatar } from "react-native-elements";
+import ImageView from "react-native-image-view";
 import firebase from "firebase";
 import { _ } from "lodash";
 
 console.disableYellowBox = true;
-
-const images = [
-  {
-    source: require('../assets/bookDefault.png'),
-    width: Layout.window.width,
-    height: Layout.window.height
-  },
-];
 
 export default class Feed extends React.Component {
   static navigationOptions = {
@@ -31,6 +17,7 @@ export default class Feed extends React.Component {
     this.state = {
       search: "",
       isImageViewVisible: false,
+      thumbnail: "",
       infoList: [],
       loading: true,
       currentUser: "-LUwfgY-M3fTZd_Rxi0z" //THIS IS DUNGOS USER ID. NEED A WAY TO SET GLOBAL USER ID WHEN A USER SIGNS IN AND MAINTAIN IT. I think firebase has a function
@@ -56,14 +43,15 @@ export default class Feed extends React.Component {
     console.log(this.state.search);
   };
 
-  viewImage = () => {
+  onPressViewImage = (item) => {
     console.log("View image");
+    this.setState({thumbnail: item.thumbnail})
     this.setState({ isImageViewVisible: true });
   };
 
-  truncateAuthorName = (author) => {
+  truncateAuthorName = author => {
     if (author == null) {
-      return "Author"
+      return "Author";
     } else {
       const result = author;
       const resultArray = result.split(" ");
@@ -95,8 +83,8 @@ export default class Feed extends React.Component {
               avatar={
                 <Avatar
                   width={100}
-                  source={{uri: item.thumbnail}}
-                  onPress={this.viewImage}
+                  source={{ uri: item.thumbnail }}
+                  onPress={() => this.onPressViewImage(item)}
                 />
               }
               key={item.key}
@@ -115,7 +103,9 @@ export default class Feed extends React.Component {
                 <View>
                   <View style={[feedstyles.right]}>
                     <Text>ISBN: {item.isbn}</Text>
-                    <Text>{this.truncateAuthorName(item.author)} | {item.year}</Text>
+                    <Text>
+                      {this.truncateAuthorName(item.author)} | {item.year}
+                    </Text>
                     <Text />
                   </View>
                   <View style={[feedstyles.row]}>
@@ -135,9 +125,20 @@ export default class Feed extends React.Component {
           ))}
         </List>
         <ImageView
-          glideAlways
-          images={images}
-          animationType="fade"
+          images={[
+            {
+              source: { uri: this.state.thumbnail },
+              width: this.state.thumbnail.width,
+              height: this.state.thumbnail.height
+            },
+            {
+              //Update this image to use the user uploaded image
+              source: require('../assets/bookDefault.png'),
+              width: 300,
+              height: 600
+            }
+          ]}
+          animationType="slide"
           isVisible={this.state.isImageViewVisible}
           onClose={() => this.setState({ isImageViewVisible: false })}
         />
