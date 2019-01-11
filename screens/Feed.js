@@ -44,8 +44,7 @@ export default class Feed extends React.Component {
   };
 
   onPressViewImage = (item) => {
-    console.log("View image");
-    this.setState({thumbnail: item.thumbnail})
+    this.setState({thumbnail: item.thumbnail});
     this.setState({ isImageViewVisible: true });
   };
 
@@ -127,15 +126,15 @@ export default class Feed extends React.Component {
         <ImageView
           images={[
             {
-              source: { uri: this.state.thumbnail },
-              width: this.state.thumbnail.width,
-              height: this.state.thumbnail.height
+              source: this.state.thumbnail === undefined ? require('../assets/bookDefault.png') : { uri: this.state.thumbnail },
+              width: this.state.thumbnail === undefined ? 150 : this.state.thumbnail.width,
+              height: this.state.thumbnail === undefined ? 150 : this.state.thumbnail.height
             },
             {
               //Update this image to use the user uploaded image
-              source: require('../assets/bookDefault.png'),
-              width: 300,
-              height: 600
+              source: this.state.image === undefined ? require('../assets/bookDefault.png') : { uri: this.state.image }, 
+              width: 150,
+              height: 150
             }
           ]}
           animationType="slide"

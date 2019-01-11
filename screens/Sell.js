@@ -64,7 +64,7 @@ export default class Sell extends React.Component {
         price: this.state.price,
         major: this.state.major,
         course: this.state.course,
-        author: this.state.authors[0],
+        authors: this.state.authors,
         year: this.state.year,
         smallThumbnail: this.state.smallThumbnail,
         thumbnail: this.state.thumbnail,
@@ -134,6 +134,7 @@ export default class Sell extends React.Component {
         <Text style={[styles.buttontext]}>List Book</Text>
       </TouchableOpacity>
     }
+    //Update formFull to true when all text fields are filled
     if (this.state.isbn != null && this.state.isbn != ''
       && this.state.major != null && this.state.major != ''
       && this.state.course != null && this.state.course != ''
@@ -141,6 +142,7 @@ export default class Sell extends React.Component {
       && this.state.formFull != true) {
       this.setState({ formFull: true })
     }
+    //Update formFull to false when a text field is deleted
     if ((this.state.isbn == ''
       || this.state.major == ''
       || this.state.course == ''
@@ -148,8 +150,9 @@ export default class Sell extends React.Component {
       && this.state.formFull != false) {
       this.setState({ formFull: false })
     }
+    //Update all book fields when book info is retrieved from ISBN api
     if (this.state.book != null
-      && this.state.authors == null
+      && this.state.authors.length == 0
       && this.state.publishedDate == null
       && this.state.smallThumbnail == null
       && this.state.thumbnail == null) {

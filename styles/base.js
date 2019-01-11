@@ -15,8 +15,8 @@ export const styles = StyleSheet.create({
       alignItems: 'stretch'
     },
     icon: {
-      height: 150,
-      width: 165,
+      height: 180,
+      width: 150,
     },
     barcode: {
       height: 75,
