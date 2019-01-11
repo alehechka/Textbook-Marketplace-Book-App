@@ -62,6 +62,14 @@ export const styles = StyleSheet.create({
       justifyContent: "center",
       alignItems: "center",
     },
+    sellbutton: {
+      height: 49,
+      flex: 1,
+      backgroundColor: Colors.tintColor,
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 50
+    },
     buttontext: {
       fontSize: 25,
       fontWeight: "bold",

@@ -6,13 +6,15 @@ import {
   TouchableOpacity,
   Image,
   KeyboardAvoidingView,
-  StyleSheet
+  StyleSheet,
+  Alert
 } from "react-native";
 import { styles } from "../styles/base.js";
 import firebase from "firebase";
 import { _ } from "lodash";
 import { BarCodeScanner, Permissions } from 'expo';
 var isbn = require('node-isbn');
+import Layout from '../constants/Layout';
 
 console.disableYellowBox = true;
 
@@ -28,6 +30,7 @@ export default class Sell extends React.Component {
     this.state = {
       isbn: null,
       title: null,
+      subtitle: null,
       price: null,
       major: null,
       course: null,
@@ -37,6 +40,7 @@ export default class Sell extends React.Component {
       thumbnail: null,
       book: null,
       scanBarcode: false,
+      formFull: false,
     };
   }
 
@@ -55,6 +59,7 @@ export default class Sell extends React.Component {
       .ref("books/" + key)
       .set({
         title: this.state.title,
+        //subtitle: this.state.subtitle,
         isbn: this.state.isbn,
         price: this.state.price,
         major: this.state.major,
@@ -92,17 +97,11 @@ export default class Sell extends React.Component {
 
   _getBookInformation = (isbnBook) => {
     isbn.resolve(isbnBook).then(returnBook => {
-      this.setState({book: returnBook});
+      this.setState({ book: returnBook });
+      console.log('Book read successful')
     }).catch(err => {
-      console.error('ISBN Read error: ' + err);
+      console.log('ISBN Read error: ' + err);
     });
-    this.setState({title: this.state.book.title + ': ' + this.state.book.subtitle});
-    this.setState({authors: this.state.book.authors});
-    this.setState({year: this.state.book.publishedDate});
-    this.setState({smallThumbnail: this.state.book.imageLinks.smallThumbnail});
-    this.setState({thumbnail: this.state.book.imageLinks.thumbnail});
-    console.log(this.state.title)
-
   };
 
   onPressReturn = () => {
@@ -113,7 +112,56 @@ export default class Sell extends React.Component {
     console.log("Upload image");
   };
 
+  onPressInvalidSell = () => {
+    console.log("Invalid sell");
+    Alert.alert("All text fields must be entered.");
+  };
+
   render() {
+    let listBook;
+    if (this.state.formFull) {
+      listBook = <TouchableOpacity
+        style={[styles.sellbutton, { width: ((Layout.window.width / 2) - 40), marginLeft: 15 }]}
+        onPress={this.onPressSell}
+      >
+        <Text style={[styles.buttontext]}>List Book</Text>
+      </TouchableOpacity>
+    } else {
+      listBook = <TouchableOpacity
+        style={[styles.sellbutton, { width: ((Layout.window.width / 2) - 40), marginLeft: 15, backgroundColor: 'gray' }]}
+        onPress={this.onPressInvalidSell}
+      >
+        <Text style={[styles.buttontext]}>List Book</Text>
+      </TouchableOpacity>
+    }
+    if (this.state.isbn != null && this.state.isbn != ''
+      && this.state.major != null && this.state.major != ''
+      && this.state.course != null && this.state.course != ''
+      && this.state.price != null && this.state.price != ''
+      && this.state.formFull != true) {
+      this.setState({ formFull: true })
+    }
+    if ((this.state.isbn == ''
+      || this.state.major == ''
+      || this.state.course == ''
+      || this.state.price == '')
+      && this.state.formFull != false) {
+      this.setState({ formFull: false })
+    }
+    if (this.state.book != null
+      && this.state.authors == null
+      && this.state.publishedDate == null
+      && this.state.smallThumbnail == null
+      && this.state.thumbnail == null) {
+      console.log(this.state.book)
+      this.setState({ title: this.state.book.title });
+      this.setState({ subtitle: this.state.book.subtitle })
+      this.setState({ authors: this.state.book.authors });
+      this.setState({ year: this.state.book.publishedDate });
+      this.setState({ smallThumbnail: this.state.book.imageLinks.smallThumbnail });
+      this.setState({ thumbnail: this.state.book.imageLinks.thumbnail });
+    }
+
     if (this.state.scanBarcode == true) {
       if (this.state.hasCameraPermission === false) {
         return (
@@ -183,28 +231,31 @@ export default class Sell extends React.Component {
               value={this.state.isbn}
               keyboardType="numeric"
               onChangeText={text => this.setState({ isbn: text })}
+              onEndEditing={() => this._getBookInformation()}
             />
-            <View style={[styles.row]}>
-              <Text style={[styles.abovetext]}>Major</Text>
-              <Text style={[styles.abovetext, { marginLeft: 135 }]}>Course</Text>
-            </View>
-            <View style={[styles.row]}>
-              <TextInput
-                style={[styles.halfbox, { marginRight: 15 }]}
-                placeholder={""}
-                value={this.state.major}
-                onChangeText={text => this.setState({ major: text })}
-              />
-              <TextInput
-                style={[styles.halfbox, { marginLeft: 15 }]}
-                placeholder={""}
-                value={this.state.course}
-                onChangeText={text => this.setState({ course: text })}
-              />
+            <View style={[styles.row, { height: 86 }]}>
+              <View style={{ flexDirection: "column" }}>
+                <Text style={[styles.abovetext]}>Major</Text>
+                <TextInput
+                  style={[styles.halfbox, { width: ((Layout.window.width / 2) - 40), marginRight: 15 }]}
+                  placeholder={""}
+                  value={this.state.major}
+                  onChangeText={text => this.setState({ major: text })}
+                />
+              </View>
+              <View style={{ flexDirection: "column" }}>
+                <Text style={[styles.abovetext, { marginLeft: 15 }]}>Course</Text>
+                <TextInput
+                  style={[styles.halfbox, { width: ((Layout.window.width / 2) - 40), marginLeft: 15 }]}
+                  placeholder={""}
+                  value={this.state.course}
+                  onChangeText={text => this.setState({ course: text })}
+                />
+              </View>
             </View>
             <View style={[styles.row]}>
               <TouchableOpacity
-                style={[styles.uploadbutton, { marginRight: 15 }]}
+                style={[styles.uploadbutton, { width: ((Layout.window.width / 2) - 40), marginRight: 15 }]}
                 onPress={this.onPressUpload}
               >
                 <Text style={[styles.buttontext]}>Upload</Text>
@@ -219,13 +270,7 @@ export default class Sell extends React.Component {
                   value={this.state.price}
                   onChangeText={text => this.setState({ price: text })}
                 />
-
-                <TouchableOpacity
-                  style={[styles.button, { marginLeft: 15 }]}
-                  onPress={this.onPressSell}
-                >
-                  <Text style={[styles.buttontext]}>List Book</Text>
-                </TouchableOpacity>
+                {listBook}
               </View>
             </View>
           </KeyboardAvoidingView>
