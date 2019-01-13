@@ -21,7 +21,7 @@ export default class Feed extends React.Component {
       thumbnail: "",
       infoList: [],
       loading: true,
-      currentUser: firebase.auth().currentUser.uid//"-LUwfgY-M3fTZd_Rxi0z" //THIS IS DUNGOS USER ID. NEED A WAY TO SET GLOBAL USER ID WHEN A USER SIGNS IN AND MAINTAIN IT. I think firebase has a function
+      currentUser: firebase.auth().currentUser.uid//DUNGO IS A GODDAMN IDIOT
     };
   }
 
@@ -76,8 +76,8 @@ export default class Feed extends React.Component {
             <ListItem
               onPress={() => {
                 console.log("chat");
-                this.props.navigation.navigate("Chat", {
-                  bookKey: item.key,
+                this.props.navigation.navigate("Threads", {
+                  bookKey: item.bookKey,
                   currentUID: this.state.currentUser
                 });
               }}
