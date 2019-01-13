@@ -1,0 +1,38 @@
+/books
+    /college
+        /bookKey
+            {
+                authors: [],
+                condition: "good",
+                isbn: "123456789",
+                bookKey: "bookKey",
+                major: "major",
+                price: "230",
+                smallThumbnail: "link",
+                thumbnail: "link",
+                title: "title",
+                year: "2019",
+                threadKey: "threadKey"
+            }
+/threads
+    /threadKey
+        {
+            threadKey: "threadKey",
+            bookKey: "bookKey",
+            buyerKey: [userKey],
+            sellerKey: "userKey",
+            messages: {}
+        }
+
+/users
+    /userKey
+        {
+            userKey: "userKey",
+            userUID: "userUID",
+            email: "email",
+            username: "username", /*parse from email*/
+            college: "college", /*parse from email*/
+            major: "major",
+            selling: [bookKey],
+            buying: [bookKey],
+        }

@@ -21,7 +21,7 @@ export default class Feed extends React.Component {
             thumbnail: "",
             infoList: [],
             loading: true,
-            currentUser: firebase.auth().currentUser.uid//"-LUwfgY-M3fTZd_Rxi0z" //THIS IS DUNGOS USER ID. NEED A WAY TO SET GLOBAL USER ID WHEN A USER SIGNS IN AND MAINTAIN IT. I think firebase has a function
+            currentUser: firebase.auth().currentUser.uid
         };
     }
 
@@ -44,16 +44,6 @@ export default class Feed extends React.Component {
         this.setState({ thumbnail: item.thumbnail });
         this.setState({ image: item.image });
         this.setState({ isImageViewVisible: true });
-    };
-
-    truncateAuthorName = author => {
-        if (author == null) {
-            return "Author";
-        } else {
-            const result = author;
-            const resultArray = result.split(" ");
-            return resultArray[resultArray.length - 1];
-        }
     };
 
     render() {
@@ -94,7 +84,7 @@ export default class Feed extends React.Component {
                                         <View style={[feedstyles.right]}>
                                             <Text>ISBN: {item.isbn}</Text>
                                             <Text>
-                                                {this.truncateAuthorName(item.author)} | {item.year}
+                                                {truncateAuthorName(item.author)} | {item.year}
                                             </Text>
                                             <Text />
                                         </View>
@@ -145,5 +135,15 @@ export default class Feed extends React.Component {
                 />
             </ScrollView>
         );
+    }
+}
+
+function truncateAuthorName(author) {
+    if (author == null) {
+        return "Author";
+    } else {
+        const result = author;
+        const resultArray = result.split(" ");
+        return resultArray[resultArray.length - 1];
     }
 }

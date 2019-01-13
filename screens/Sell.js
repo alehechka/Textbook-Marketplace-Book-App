@@ -33,7 +33,7 @@ export default class Sell extends React.Component {
       subtitle: null,
       price: null,
       major: null,
-      course: null,
+      condition: null,
       authors: [],
       year: null,
       smallThumbnail: null,
@@ -89,7 +89,7 @@ export default class Sell extends React.Component {
         isbn: this.state.isbn,
         price: this.state.price,
         major: this.state.major,
-        course: this.state.course,
+        condition: this.state.condition,
         authors: this.state.authors,
         year: this.state.year,
         smallThumbnail: this.state.smallThumbnail,
@@ -175,7 +175,7 @@ export default class Sell extends React.Component {
     //Update formFull to true when all text fields are filled
     if (this.state.isbn != null && this.state.isbn != ''
       && this.state.major != null && this.state.major != ''
-      && this.state.course != null && this.state.course != ''
+      && this.state.condition != null && this.state.condition != ''
       && this.state.price != null && this.state.price != ''
       && this.state.formFull != true) {
       this.setState({ formFull: true })
@@ -183,7 +183,7 @@ export default class Sell extends React.Component {
     //Update formFull to false when a text field is deleted
     if ((this.state.isbn == ''
       || this.state.major == ''
-      || this.state.course == ''
+      || this.state.condition == ''
       || this.state.price == '')
       && this.state.formFull != false) {
       this.setState({ formFull: false })
@@ -285,12 +285,12 @@ export default class Sell extends React.Component {
                 />
               </View>
               <View style={{ flexDirection: "column" }}>
-                <Text style={[styles.abovetext, { marginLeft: 15 }]}>Course</Text>
+                <Text style={[styles.abovetext, { marginLeft: 15 }]}>Condition</Text>
                 <TextInput
                   style={[styles.halfbox, { width: ((Layout.window.width / 2) - 40), marginLeft: 15 }]}
                   placeholder={""}
                   value={this.state.course}
-                  onChangeText={text => this.setState({ course: text })}
+                  onChangeText={text => this.setState({ condition: text })}
                 />
               </View>
             </View>

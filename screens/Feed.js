@@ -50,16 +50,6 @@ export default class Feed extends React.Component {
     this.setState({ isImageViewVisible: true });
   };
 
-  truncateAuthorName = author => {
-    if (author == null) {
-      return "Author";
-    } else {
-      const result = author;
-      const resultArray = result.split(" ");
-      return resultArray[resultArray.length - 1];
-    }
-  };
-
   render() {
     return (
       <ScrollView style={{ marginTop: 25, backgroundColor: "white" }}>
@@ -106,7 +96,7 @@ export default class Feed extends React.Component {
                   <View style={[feedstyles.right]}>
                     <Text>ISBN: {item.isbn}</Text>
                     <Text>
-                      {this.truncateAuthorName(item.author)} | {item.year}
+                      {truncateAuthorName(item.author)} | {item.year}
                     </Text>
                     <Text />
                   </View>
@@ -157,5 +147,15 @@ export default class Feed extends React.Component {
         />
       </ScrollView>
     );
+  }
+}
+
+function truncateAuthorName(author) {
+  if (author == null) {
+      return "Author";
+  } else {
+      const result = author;
+      const resultArray = result.split(" ");
+      return resultArray[resultArray.length - 1];
   }
 }
