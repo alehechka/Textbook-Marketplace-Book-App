@@ -38,9 +38,12 @@ export default class Sell extends React.Component {
       year: null,
       smallThumbnail: null,
       thumbnail: null,
+      image: null,
+      imageBase64: null,
       book: null,
       scanBarcode: false,
       formFull: false,
+      userUID: firebase.auth().currentUser.uid
     };
   }
 
@@ -49,17 +52,40 @@ export default class Sell extends React.Component {
 
   onPressSell = () => {
     this._getBookInformation(this.state.isbn);
-    let result = firebase
+    let bookResult = firebase
       .database()
       .ref("books/")
       .push();
-    let key = result.key;
+    let bookKey = bookResult.key;
+    let threadResult = firebase
+      .database()
+      .ref("threads/")
+      .push();
+    let threadKey = threadResult.key;
+
+    //This code is for image upload. Currently it throws an error because it doesn't like base64
+    /*
+      var imageRef = firebase.storage().ref().child("images/" + key + ".jpg")
+      .putString(this.state.imageBase64.substring(23), 'base64').then(function(snapshot) {
+        console.log('Uploaded a base64 string!');
+      }).catch(function(error) {
+        console.log("Error uploading image");
+      });
+      imageRef.updateMetadata({'bookKey': key}).then(function(metadata) {
+        console.log("Metadata update succesful")
+      }).catch(function(error) {
+        console.log("Metadata update failed")
+      });
+      imageRef.getDownloadURL().then(url => {
+        this.setState({image: url})
+      })
+    */
+
     firebase
       .database()
-      .ref("books/" + key)
+      .ref("books/" + bookKey)
       .set({
         title: this.state.title,
-        //subtitle: this.state.subtitle,
         isbn: this.state.isbn,
         price: this.state.price,
         major: this.state.major,
@@ -68,7 +94,19 @@ export default class Sell extends React.Component {
         year: this.state.year,
         smallThumbnail: this.state.smallThumbnail,
         thumbnail: this.state.thumbnail,
-        key: key
+        image: this.state.image,
+        bookKey: bookKey,
+        threadKey: threadKey,
+        sellerUID: this.state.userUID,
+      });
+    firebase
+      .database()
+      .ref("threads/" + threadKey)
+      .set({
+        bookKey: bookKey,
+        sellerUID: this.state.userUID,
+        buyerUID: [],
+        threadKey: threadKey
       });
     console.log("List book:");
     console.log(this.state.title, this.state.isbn, this.state.major, this.state.course, this.state.price);

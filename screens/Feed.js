@@ -3,6 +3,7 @@ import { Text, View, ScrollView, TextInput } from "react-native";
 import { styles, feedstyles } from "../styles/base.js";
 import { List, ListItem, Avatar } from "react-native-elements";
 import ImageView from "react-native-image-view";
+import Layout from "../constants/Layout";
 import firebase from "firebase";
 import { _ } from "lodash";
 
@@ -20,7 +21,7 @@ export default class Feed extends React.Component {
       thumbnail: "",
       infoList: [],
       loading: true,
-      currentUser: "-LUwfgY-M3fTZd_Rxi0z" //THIS IS DUNGOS USER ID. NEED A WAY TO SET GLOBAL USER ID WHEN A USER SIGNS IN AND MAINTAIN IT. I think firebase has a function
+      currentUser: firebase.auth().currentUser.uid//"-LUwfgY-M3fTZd_Rxi0z" //THIS IS DUNGOS USER ID. NEED A WAY TO SET GLOBAL USER ID WHEN A USER SIGNS IN AND MAINTAIN IT. I think firebase has a function
     };
   }
 
@@ -44,7 +45,8 @@ export default class Feed extends React.Component {
   };
 
   onPressViewImage = (item) => {
-    this.setState({thumbnail: item.thumbnail});
+    this.setState({ thumbnail: item.thumbnail });
+    this.setState({ image: item.image });
     this.setState({ isImageViewVisible: true });
   };
 
@@ -82,7 +84,8 @@ export default class Feed extends React.Component {
               avatar={
                 <Avatar
                   width={100}
-                  source={{ uri: item.thumbnail }}
+                  source={item.thumbnail !== undefined ? { uri: item.thumbnail }
+                    : item.image !== null ? { uri: item.image } : require('../assets/bookDefault.png')}
                   onPress={() => this.onPressViewImage(item)}
                 />
               }
@@ -125,19 +128,30 @@ export default class Feed extends React.Component {
         </List>
         <ImageView
           images={[
-            {
-              source: this.state.thumbnail === undefined ? require('../assets/bookDefault.png') : { uri: this.state.thumbnail },
-              width: this.state.thumbnail === undefined ? 150 : this.state.thumbnail.width,
-              height: this.state.thumbnail === undefined ? 150 : this.state.thumbnail.height
-            },
-            {
-              //Update this image to use the user uploaded image
-              source: this.state.image === undefined ? require('../assets/bookDefault.png') : { uri: this.state.image }, 
-              width: 150,
-              height: 150
-            }
+            this.state.thumbnail !== undefined ?
+              {
+                source: { uri: this.state.thumbnail },
+                width: this.state.thumbnail.width,
+                height: this.state.thumbnail.height
+              } :
+              {
+                source: require('../assets/bookDefault.png'),
+                width: 150,
+                height: 150
+              },
+            this.state.image !== undefined ?
+              {
+                source: { uri: this.state.image },
+                width: Layout.window.width * (2 / 3),
+                height: Layout.window.height * (2 / 3)
+              } :
+              {
+                source: require('../assets/bookDefault.png'),
+                width: 150,
+                height: 150
+              },
           ]}
-          animationType="slide"
+          animationType="fade"
           isVisible={this.state.isImageViewVisible}
           onClose={() => this.setState({ isImageViewVisible: false })}
         />
