@@ -2,37 +2,53 @@
     /college
         /bookKey
             {
-                authors: [],
-                condition: "good",
-                isbn: "123456789",
                 bookKey: "bookKey",
+                threadKey: "threadKey"
+                authors: [
+                    "author",
+                ],
+                condition: "condition",
+                isbn: "isbn",
                 major: "major",
-                price: "230",
+                price: "price",
                 smallThumbnail: "link",
                 thumbnail: "link",
                 title: "title",
-                year: "2019",
-                threadKey: "threadKey"
+                year: "year",
             }
 /threads
     /threadKey
         {
             threadKey: "threadKey",
             bookKey: "bookKey",
-            buyerKey: [userKey],
-            sellerKey: "userKey",
-            messages: {}
+            sellerUID: "userUID",
+            chats: [
+                {
+                    buyerUID: "buyerUID",
+                    chatKey: "chatKey"
+                },
+            ],
+        }
+
+/chats
+    /chatKey
+        {
+            chatKey: "chatKey",
+            /* DONO CAN DESIGN THIS PART */
         }
 
 /users
-    /userKey
+    /userUID
         {
-            userKey: "userKey",
             userUID: "userUID",
             email: "email",
-            username: "username", /*parse from email*/
-            college: "college", /*parse from email*/
+            username: "username",
+            college: "college",
             major: "major",
-            selling: [bookKey],
-            buying: [bookKey],
+            selling: [
+                "bookKey",
+            ],
+            buying: [
+                "bookKey",
+            ],
         }
