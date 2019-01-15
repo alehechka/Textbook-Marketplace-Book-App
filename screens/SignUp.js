@@ -17,9 +17,29 @@ export default class SignUp extends React.Component {
   };
   constructor(props) {
     super(props);
-    this.state = { email: "" };
-    this.state = { password: "" };
-    this.state = { confirmedPassword: "" };
+    this.state = {
+      email: null,
+      password: null,
+      confirmedPassword: null,
+      major: null,
+      userUID: null
+    };
+  }
+
+  createProfile = () => {
+    firebase
+      .database()
+      .ref("users/" + this.state.userUID)
+      .set({
+        userUID: this.state.userUID,
+        email: this.state.email,
+        username: getUsername(this.state.email),
+        college: getCollege(this.state.email),
+        major: this.state.major,
+        verified: "true"
+      });
+      console.log(this.state);
+      this.props.navigation.navigate("Feed");
   }
 
   onPressSignup = () => {
@@ -32,11 +52,17 @@ export default class SignUp extends React.Component {
       if (testEmail(this.state.email) == -1) {
         Alert.alert("Not a valid email, please use college email.");
       } else {
-        createAccount(this.state.email, this.state.confirmedPassword);
-        this.props.navigation.navigate("Email");
+        createAccount(this.state.email, this.state.password);
+        firebase.auth().onAuthStateChanged(user => {
+          if (user) {
+            this.setState({ userUID: firebase.auth().currentUser.uid })
+            this.createProfile();
+            this.props.navigation.navigate("Feed");
+          }
+        });
       }
     }
-  };
+  }
   render() {
     return (
       <View style={[styles.container]}>
@@ -69,6 +95,11 @@ export default class SignUp extends React.Component {
             secureTextEntry={true}
             onChangeText={text => this.setState({ confirmedPassword: text })}
           />
+          <Text style={[styles.abovetext]}>Major</Text>
+          <TextInput
+            style={[styles.textbox, { marginBottom: 25 }]}
+            onChangeText={text => this.setState({ major: text })}
+          />
           <View style={{ alignItems: "center" }}>
             <TouchableOpacity
               style={[styles.button]}
@@ -82,43 +113,37 @@ export default class SignUp extends React.Component {
     );
   }
 }
-function testEmail(userEmail) {
+function testEmail(email) {
   var str = "";
-  str = userEmail;
+  str = email;
 
   var final = str.search("unomaha.edu");
   return final;
 }
-function testPasswords(userPassword, userConfirmedPassword) {
-  if (userPassword === userConfirmedPassword) {
+
+function testPasswords(password, confirmedPassword) {
+  if (password === confirmedPassword) {
     return true;
   } else {
     return false;
   }
 }
+
+function getUsername(email) {
+  return email.split("@")[0];
+}
+
+function getCollege(email) {
+  const domain = email.split("@")[1]
+  return domain.split(".")[0];
+}
+
 function createAccount(email, password) {
   firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
-    .catch(function(error) {
+    .catch(function (error) {
       // Handle Error's here
       console.log(error);
-      var errorcode = error.code;
-      var errorMessage = error.message;
     });
-
-  let result = firebase
-    .database()
-    .ref("users/")
-    .push();
-  let key = result.key;
-  //NEEd TO HAVE A WAY TO MAKE SURE A USER DOESNT SIGN UP TWICE OR DATABSE INTEGRITY WILL CRUMBLE!!!
-  firebase
-    .database()
-    .ref("users/" + key)
-    .set({
-      email: email,
-      verified: "true"
-    });
-  global.currentUser = key;
 }

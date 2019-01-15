@@ -35,7 +35,7 @@ export default class LoginScreen extends React.Component {
   componentWillMount() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        this.props.navigation.navigate("Feed");
+        //this.props.navigation.navigate("Feed");
       }
     });
   }
