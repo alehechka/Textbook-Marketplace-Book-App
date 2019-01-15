@@ -21,23 +21,39 @@ export default class Feed extends React.Component {
             thumbnail: "",
             infoList: [],
             loading: true,
-            currentUser: firebase.auth().currentUser.uid
+            userUID: firebase.auth().currentUser.uid,
+            sellingBooks: [],
+            college: null
         };
     }
 
     componentDidMount() {
-        this.getBooks();
+        this.retrieveUser();
+    }
+
+    retrieveUser = () => {
+        firebase
+            .database()
+            .ref("users/" + this.state.userUID)
+            .on("value", snapshot => {
+                let user = snapshot.val();
+                this.setState({ sellingBooks: user.selling, college: user.college, loading: false });
+            });
     }
 
     getBooks = () => {
-        firebase
-            .database()
-            .ref(`books/`)
-            .on("value", snapshot => {
-                let books = snapshot.val();
-                let infoList = Object.values(books);
-                this.setState({ infoList, loading: false });
-            });
+        var list = [];
+        for (var i = 0; i < this.state.sellingBooks.length; i++) {
+            firebase
+                .database()
+                .ref("books/" + this.state.college + "/" + this.state.sellingBooks[i])
+                .on("value", snapshot => {
+                    let book = snapshot.val();
+                    list.push(Object.values(book)[0]);
+                    console.log(list);
+                });
+        }
+        this.setState({ infoList: list })
     };
 
     onPressViewImage = (item) => {
@@ -47,61 +63,64 @@ export default class Feed extends React.Component {
     };
 
     render() {
+        if (this.state.loading == false) {
+            this.getBooks();
+            this.setState({ loading: true })
+        }
         return (
             <ScrollView style={{ backgroundColor: "white" }}>
                 <List>
                     {this.state.infoList.map(item => (
-                        item.sellerUID == this.state.currentUser ?
-                            <ListItem
-                                onPress={() => {
-                                    console.log("chat");
-                                    this.props.navigation.navigate("Threads", {
-                                        book: item
-                                    });
-                                }}
-                                avatar={
-                                    <Avatar
-                                        width={100}
-                                        source={item.thumbnail !== undefined ? { uri: item.thumbnail }
-                                            : item.image !== null ? { uri: item.image } : require('../assets/bookDefault.png')}
-                                        onPress={() => this.onPressViewImage(item)}
-                                    />
-                                }
-                                key={item.key}
-                                title={
+                        <ListItem
+                            onPress={() => {
+                                console.log("chat");
+                                this.props.navigation.navigate("Threads", {
+                                    book: item
+                                });
+                            }}
+                            avatar={
+                                <Avatar
+                                    width={100}
+                                    source={item.thumbnail !== undefined ? { uri: item.thumbnail }
+                                        : item.image !== null ? { uri: item.image } : require('../assets/bookDefault.png')}
+                                    onPress={() => this.onPressViewImage(item)}
+                                />
+                            }
+                            key={item.key}
+                            title={
+                                <View style={[feedstyles.right]}>
+                                    <Text
+                                        ellipsizeMode={"tail"}
+                                        numberOfLines={1}
+                                        style={[feedstyles.title]}
+                                    >
+                                        {item.title}
+                                    </Text>
+                                </View>
+                            }
+                            subtitle={
+                                <View>
                                     <View style={[feedstyles.right]}>
-                                        <Text
-                                            ellipsizeMode={"tail"}
-                                            numberOfLines={1}
-                                            style={[feedstyles.title]}
-                                        >
-                                            {item.title}
+                                        <Text>ISBN: {item.isbn}</Text>
+                                        <Text>
+                                            {truncateAuthorName(item.author)} | {item.year}
                                         </Text>
+                                        <Text />
                                     </View>
-                                }
-                                subtitle={
-                                    <View>
-                                        <View style={[feedstyles.right]}>
-                                            <Text>ISBN: {item.isbn}</Text>
-                                            <Text>
-                                                {truncateAuthorName(item.author)} | {item.year}
+                                    <View style={[feedstyles.row]}>
+                                        <View style={[feedstyles.left, { flex: 1 }]}>
+                                            <Text style={[feedstyles.price]}>${item.price}</Text>
+                                        </View>
+                                        <View style={[styles.right, { flex: 1 }]}>
+                                            <Text style={[feedstyles.majorCourse]}>{item.major}</Text>
+                                            <Text style={[feedstyles.majorCourse]}>
+                                                {item.course}
                                             </Text>
-                                            <Text />
-                                        </View>
-                                        <View style={[feedstyles.row]}>
-                                            <View style={[feedstyles.left, { flex: 1 }]}>
-                                                <Text style={[feedstyles.price]}>${item.price}</Text>
-                                            </View>
-                                            <View style={[styles.right, { flex: 1 }]}>
-                                                <Text style={[feedstyles.majorCourse]}>{item.major}</Text>
-                                                <Text style={[feedstyles.majorCourse]}>
-                                                    {item.course}
-                                                </Text>
-                                            </View>
                                         </View>
                                     </View>
-                                }
-                            /> : <View></View>
+                                </View>
+                            }
+                        />
                     ))}
                 </List>
                 <ImageView

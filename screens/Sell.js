@@ -43,18 +43,32 @@ export default class Sell extends React.Component {
       book: null,
       scanBarcode: false,
       formFull: false,
-      userUID: firebase.auth().currentUser.uid
+      userUID: firebase.auth().currentUser.uid,
+      sellingBooks: null,
+      college: null
     };
   }
 
   componentDidMount() {
+    this.retrieveUser();
+  }
+
+  retrieveUser = () => {
+    firebase
+      .database()
+      .ref("users/" + this.state.userUID)
+      .on("value", snapshot => {
+        let user = snapshot.val();
+        this.setState({ sellingBooks: user.selling, college: user.college, loading: false });
+        console.log(this.state.sellingBooks);
+      });
   }
 
   onPressSell = () => {
     this._getBookInformation(this.state.isbn);
     let bookResult = firebase
       .database()
-      .ref("books/")
+      .ref("books/" + this.state.college)
       .push();
     let bookKey = bookResult.key;
     let threadResult = firebase
@@ -83,7 +97,7 @@ export default class Sell extends React.Component {
 
     firebase
       .database()
-      .ref("books/" + bookKey)
+      .ref("books/" + this.state.college + "/" + bookKey + "/" + bookKey)
       .set({
         title: this.state.title,
         isbn: this.state.isbn,
@@ -97,7 +111,6 @@ export default class Sell extends React.Component {
         image: this.state.image,
         bookKey: bookKey,
         threadKey: threadKey,
-        sellerUID: this.state.userUID,
       });
     firebase
       .database()
@@ -105,13 +118,35 @@ export default class Sell extends React.Component {
       .set({
         bookKey: bookKey,
         sellerUID: this.state.userUID,
-        buyerUID: [],
+        chats: [{}],
         threadKey: threadKey
       });
+    this.addBookToSelling(bookKey);
     console.log("List book:");
     console.log(this.state.title, this.state.isbn, this.state.major, this.state.course, this.state.price);
     this.props.navigation.navigate("Selling");
   };
+
+  addBookToSelling = (bookKey) => {
+    if (this.state.sellingBooks == null) {
+      firebase
+        .database()
+        .ref("users/" + this.state.userUID)
+        .update({
+          selling: [bookKey]
+        });
+    } else {
+      var list = this.state.sellingBooks;
+      list.push(bookKey);
+      this.setState({ sellingBooks: list });
+      firebase
+        .database()
+        .ref("users/" + this.state.userUID)
+        .update({
+          selling: list
+        });
+    }
+  }
 
   onPressScan = () => {
     console.log("Scan barcode");
