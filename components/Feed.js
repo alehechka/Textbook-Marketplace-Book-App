@@ -4,45 +4,18 @@ import { styles, feedstyles } from "../styles/base.js";
 import { List, ListItem, Avatar } from "react-native-elements";
 import ImageView from "react-native-image-view";
 import Layout from "../constants/Layout";
-import firebase from "firebase";
 import { _ } from "lodash";
 
-console.disableYellowBox = true;
-
 export default class Feed extends React.Component {
-  static navigationOptions = {
-    header: null
-  };
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       search: "",
-      isImageViewVisible: false,
       thumbnail: "",
-      infoList: [],
-      loading: true,
-      currentUser: firebase.auth().currentUser.uid//DUNGO IS A GODDAMN IDIOT
-    };
+      image: "",
+      isImageViewVisible: false,
+    }
   }
-
-  componentDidMount() {
-    this.getBooks();
-  }
-
-  getBooks = () => {
-    firebase
-      .database()
-      .ref(`books/`)
-      .on("value", snapshot => {
-        let books = snapshot.val();
-        let infoList = Object.values(books);
-        this.setState({ infoList, loading: false });
-      });
-  };
-
-  submitSearch = () => {
-    console.log(this.state.search);
-  };
 
   onPressViewImage = (item) => {
     this.setState({ thumbnail: item.thumbnail });
@@ -50,25 +23,30 @@ export default class Feed extends React.Component {
     this.setState({ isImageViewVisible: true });
   };
 
+  submitSearch = () => {
+    console.log(this.state.search);
+  };
+
   render() {
     return (
-      <ScrollView style={{ marginTop: 25, backgroundColor: "white" }}>
-        <View style={[styles.container, { marginTop: 15 }]}>
-          <TextInput
-            style={[feedstyles.textbox, { borderRadius: 50 }]}
-            placeholder={" Search"}
-            onChangeText={text => this.setState({ search: text })}
-            onSubmitEditing={this.submitSearch}
-          />
-        </View>
+      <ScrollView style={{ backgroundColor: "white" }}>
+        {this.props.searchBar ?
+          <View style={{ marginTop: 25 }}>
+            <View style={[styles.container, { marginTop: 15 }]}>
+              <TextInput
+                style={[feedstyles.textbox, { borderRadius: 50 }]}
+                placeholder={" Search"}
+                onChangeText={text => this.setState({ search: text })}
+                onSubmitEditing={this.submitSearch}
+              />
+            </View></View> : <View></View>}
         <List>
-          {this.state.infoList.map(item => (
+          {this.props.infoList.map(item => (
             <ListItem
               onPress={() => {
                 console.log("chat");
                 this.props.navigation.navigate("Threads", {
                   bookKey: item.bookKey,
-                  currentUID: this.state.currentUser
                 });
               }}
               avatar={
@@ -96,7 +74,7 @@ export default class Feed extends React.Component {
                   <View style={[feedstyles.right]}>
                     <Text>ISBN: {item.isbn}</Text>
                     <Text>
-                      {truncateAuthorName(item.author)} | {item.year}
+                      {truncateAuthorName(item.authors[0])} | {item.year.substring(0,4)}
                     </Text>
                     <Text />
                   </View>
@@ -107,7 +85,7 @@ export default class Feed extends React.Component {
                     <View style={[styles.right, { flex: 1 }]}>
                       <Text style={[feedstyles.majorCourse]}>{item.major}</Text>
                       <Text style={[feedstyles.majorCourse]}>
-                        {item.course}
+                        {item.condition}
                       </Text>
                     </View>
                   </View>
@@ -149,13 +127,12 @@ export default class Feed extends React.Component {
     );
   }
 }
-
 function truncateAuthorName(author) {
   if (author == null) {
-      return "Author";
+    return "Author";
   } else {
-      const result = author;
-      const resultArray = result.split(" ");
-      return resultArray[resultArray.length - 1];
+    const result = author;
+    const resultArray = result.split(" ");
+    return resultArray[resultArray.length - 1];
   }
 }

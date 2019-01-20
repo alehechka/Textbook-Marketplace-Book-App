@@ -1,0 +1,4 @@
+Global variables do not like to update with firebase
+    Instead, make it so pages needing user will call the user from firebase (redundant urg)
+    Create new file for firebase functions
+

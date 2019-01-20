@@ -28,31 +28,54 @@ export default class LoginScreen extends React.Component {
   };
   constructor(props) {
     super(props);
-    this.state = { userEmail: "" };
-    this.state = { password: "" };
+    this.state = {
+      userEmail: "",
+      password: "",
+      userProfile: null,
+      loading: true
+    };
   }
 
   componentWillMount() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        this.props.navigation.navigate("Feed");
+        this.retrieveUser(user);
       }
     });
   }
 
+  checkUserLoggedIn = () => {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.retrieveUser(user);
+      }
+    });
+  };
+
+  retrieveUser = (user) => {
+    firebase
+      .database()
+      .ref("users/" + user.uid)
+      .on("value", snapshot => {
+        let userSnapshot = snapshot.val();
+        global.userProfile = userSnapshot;
+        this.setState({ userProfile: userSnapshot, loading: false });
+      });
+  };
+
   onPressSignup = () => {
-    console.log("Sign up1");
     this.props.navigation.navigate("SignUp");
   };
 
   onPressLogin = () => {
     console.log("Sign in");
-    console.log(this.state.userEmail);
-    console.log(this.state.password);
     signIn(this.state.userEmail, this.state.password);
   };
 
   render() {
+    if (this.state.loading == false) {
+      this.props.navigation.navigate("Feed");
+    }
     return (
       <View style={[styles.container]}>
         <KeyboardAvoidingView behavior="padding" enabled>
@@ -101,11 +124,11 @@ function signIn(email, password) {
     .auth()
     .signInWithEmailAndPassword(email, password)
     .then(() => this.props.navigation.navigate("Feed"))
-    .catch(function(error) {
+    .catch(function (error) {
       //Handle errors here
       var errorCode = error.code;
       var errorMessage = error.message;
-      if(errorCode != null) {
+      if (errorCode != null) {
         Alert.alert("Email or password is incorrect.");
       }
       console.log(error);

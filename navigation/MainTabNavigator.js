@@ -11,7 +11,7 @@ import Screen from '../Screen.js';
 
 const FeedStack = createStackNavigator({
   Feed: Screen.Feed,
-  Chat: Screen.Chat
+  Threads: Screen.Threads,
 });
 
 FeedStack.navigationOptions = {

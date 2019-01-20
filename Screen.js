@@ -1,5 +1,5 @@
 import Chat from "./screens/Chat.js";
-import Feed from "./screens/Feed.js";
+import Feed from "./screens/MainFeed.js";
 import Sell from "./screens/Sell.js";
 import SignIn from './screens/SignIn';
 import SignUp from './screens/SignUp';

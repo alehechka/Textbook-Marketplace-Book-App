@@ -43,25 +43,13 @@ export default class Sell extends React.Component {
       book: null,
       scanBarcode: false,
       formFull: false,
-      userUID: firebase.auth().currentUser.uid,
-      sellingBooks: null,
-      college: null
+      userUID: global.userProfile.userUID,
+      sellingBooks: global.userProfile.selling,
+      college: global.userProfile.college
     };
   }
 
   componentDidMount() {
-    this.retrieveUser();
-  }
-
-  retrieveUser = () => {
-    firebase
-      .database()
-      .ref("users/" + this.state.userUID)
-      .on("value", snapshot => {
-        let user = snapshot.val();
-        this.setState({ sellingBooks: user.selling, college: user.college, loading: false });
-        console.log(this.state.sellingBooks);
-      });
   }
 
   onPressSell = () => {
@@ -97,7 +85,7 @@ export default class Sell extends React.Component {
 
     firebase
       .database()
-      .ref("books/" + this.state.college + "/" + bookKey + "/" + bookKey)
+      .ref("books/" + this.state.college + "/" + bookKey)
       .set({
         title: this.state.title,
         isbn: this.state.isbn,
@@ -183,6 +171,7 @@ export default class Sell extends React.Component {
 
   onPressUpload = () => {
     console.log("Upload image");
+    this._getBookInformation(this.state.isbn);
   };
 
   onPressInvalidSell = () => {
