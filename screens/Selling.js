@@ -15,14 +15,24 @@ export default class SellingFeed extends React.Component {
         super(props);
         this.state = {
             infoList: [],
-            userUID: global.userProfile.userUID,
-            sellingBooks: global.userProfile.selling,
-            college: global.userProfile.college
+            sellingBooks: [],
+            college: null,
+            retrieveBooks: false,
         };
     }
 
     componentDidMount() {
-        this.getBooks();
+        this.retrieveUser(firebase.auth().currentUser.uid);
+    }
+
+    retrieveUser = (userUID) => {
+        firebase
+            .database()
+            .ref("users/" + userUID)
+            .on("value", snapshot => {
+                let user = snapshot.val();
+                this.setState({ sellingBooks: user.selling, college: user.college, retrieveBooks: true });
+            });
     }
 
     getBooks = () => {
@@ -36,15 +46,18 @@ export default class SellingFeed extends React.Component {
                     .on("value", snapshot => {
                         let book = snapshot.val();
                         list.push(Object.values(book)[0]);
-                        this.setState({ infoList: list })
+                        this.setState({ infoList: list, retrieveBooks: false })
                     });
             }
         } else {
-            this.setState({ infoList: list })
+            this.setState({ infoList: list, retrieveBooks: false })
         }
     };
 
     render() {
+        if (this.state.retrieveBooks == true) {
+            this.getBooks();
+        }
         return (
             <View>
                 <Feed infoList={this.state.infoList} searchBar={false} navigation={this.props.navigation} />

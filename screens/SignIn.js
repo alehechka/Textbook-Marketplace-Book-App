@@ -39,43 +39,20 @@ export default class LoginScreen extends React.Component {
   componentWillMount() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        this.retrieveUser(user);
+        this.props.navigation.navigate("Feed");
       }
     });
   }
-
-  checkUserLoggedIn = () => {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.retrieveUser(user);
-      }
-    });
-  };
-
-  retrieveUser = (user) => {
-    firebase
-      .database()
-      .ref("users/" + user.uid)
-      .on("value", snapshot => {
-        let userSnapshot = snapshot.val();
-        global.userProfile = userSnapshot;
-        this.setState({ userProfile: userSnapshot, loading: false });
-      });
-  };
 
   onPressSignup = () => {
     this.props.navigation.navigate("SignUp");
   };
 
   onPressLogin = () => {
-    console.log("Sign in");
     signIn(this.state.userEmail, this.state.password);
   };
 
   render() {
-    if (this.state.loading == false) {
-      this.props.navigation.navigate("Feed");
-    }
     return (
       <View style={[styles.container]}>
         <KeyboardAvoidingView behavior="padding" enabled>
@@ -119,18 +96,17 @@ export default class LoginScreen extends React.Component {
     );
   }
 }
+
 function signIn(email, password) {
   firebase
-    .auth()
-    .signInWithEmailAndPassword(email, password)
-    .then(() => this.props.navigation.navigate("Feed"))
-    .catch(function (error) {
-      //Handle errors here
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      if (errorCode != null) {
-        Alert.alert("Email or password is incorrect.");
-      }
-      console.log(error);
-    });
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => this.props.navigation.navigate("Feed"))
+      .catch(function (error) {
+          //Handle errors here
+          var errorCode = error.code;
+          if (errorCode != null) {
+              Alert.alert("Email or password is incorrect.");
+          }
+      });
 }

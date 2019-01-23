@@ -14,19 +14,29 @@ export default class BuyingFeed extends React.Component {
         super(props);
         this.state = {
             infoList: [],
-            userUID: global.userProfile.userUID,
-            buyingBooks: global.userProfile.buying,
-            college: global.userProfile.college
+            buyingBooks: [],
+            college: null,
+            retrieveBooks: false
         };
     }
 
     componentDidMount() {
-        this.getBooks();
+        this.retrieveUser(firebase.auth().currentUser.uid);
+    }
+
+    retrieveUser = (userUID) => {
+        firebase
+            .database()
+            .ref("users/" + userUID)
+            .on("value", snapshot => {
+                let user = snapshot.val();
+                this.setState({ buyingBooks: user.buying, college: user.college, retrieveBooks: true });
+            });
     }
 
     getBooks = () => {
         var list = [];
-        if (this.state.buyingBooks != null || this.state.buyingBooks != undefined) {
+        if (this.state.buyingBooks != null && this.state.buyingBooks != undefined) {
             for (var i = 0; i < this.state.buyingBooks.length; i++) {
                 firebase
                     .database()
@@ -35,15 +45,18 @@ export default class BuyingFeed extends React.Component {
                     .on("value", snapshot => {
                         let book = snapshot.val();
                         list.push(Object.values(book)[0]);
-                        this.setState({ infoList: list })
+                        this.setState({ infoList: list, retrieveBooks: false })
                     });
             }
         } else {
-            this.setState({ infoList: list })
+            this.setState({ infoList: list, retrieveBooks: false })
         }
     }
 
     render() {
+        if (this.state.retrieveBooks == true) {
+            this.getBooks();
+        }
         return (
             <View>
                 <Feed infoList={this.state.infoList} searchBar={false} navigation={this.props.navigation} />

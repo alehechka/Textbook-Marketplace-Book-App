@@ -43,14 +43,25 @@ export default class Sell extends React.Component {
       book: null,
       scanBarcode: false,
       formFull: false,
-      userUID: global.userProfile.userUID,
-      sellingBooks: global.userProfile.selling,
-      college: global.userProfile.college
+      userUID: firebase.auth().currentUser.uid,
+      sellingBooks: [],
+      college: null
     };
   }
 
   componentDidMount() {
+    this.retrieveUser(firebase.auth().currentUser.uid);
   }
+
+  retrieveUser = (userUID) => {
+    firebase
+        .database()
+        .ref("users/" + userUID)
+        .on("value", snapshot => {
+            let user = snapshot.val();
+            this.setState({ sellingBooks: user.selling, college: user.college });
+        });
+}
 
   onPressSell = () => {
     this._getBookInformation(this.state.isbn);
@@ -110,8 +121,6 @@ export default class Sell extends React.Component {
         threadKey: threadKey
       });
     this.addBookToSelling(bookKey);
-    console.log("List book:");
-    console.log(this.state.title, this.state.isbn, this.state.major, this.state.course, this.state.price);
     this.props.navigation.navigate("Selling");
   };
 
@@ -137,7 +146,6 @@ export default class Sell extends React.Component {
   }
 
   onPressScan = () => {
-    console.log("Scan barcode");
     this._requestCameraPermission();
     this.setState({ scanBarcode: true });
   };
@@ -150,7 +158,6 @@ export default class Sell extends React.Component {
   };
 
   _handleIsbnRead = data => {
-    console.log(data.data);
     this.setState({ isbn: data.data });
     this._getBookInformation(this.state.isbn);
     this.setState({ scanBarcode: false });
@@ -170,12 +177,11 @@ export default class Sell extends React.Component {
   };
 
   onPressUpload = () => {
-    console.log("Upload image");
+    //This button temporarily retries the ISBN retieval until we can get a fix in for that function.
     this._getBookInformation(this.state.isbn);
   };
 
   onPressInvalidSell = () => {
-    console.log("Invalid sell");
     Alert.alert("All text fields must be entered.");
   };
 

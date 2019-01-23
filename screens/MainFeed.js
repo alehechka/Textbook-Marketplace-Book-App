@@ -15,28 +15,41 @@ export default class MainFeed extends React.Component {
     this.state = {
       infoList: [],
       loading: true,
-      college: global.userProfile.college
+      retrieveBooks: false,
+      userProfile: null
     };
   }
 
   componentDidMount() {
-    this.getBooks();
+    this.retrieveUser(firebase.auth().currentUser.uid);
+  }
+
+  retrieveUser = (userUID) => {
+    firebase
+      .database()
+      .ref("users/" + userUID)
+      .on("value", snapshot => {
+        this.setState({ userProfile: snapshot.val(), retrieveBooks: true });
+      });
   }
 
   getBooks = () => {
     firebase
       .database()
-      .ref("books/" + this.state.college)
+      .ref("books/" + this.state.userProfile.college)
       .on("value", snapshot => {
         let books = snapshot.val();
         if (books != null) {
           let infoList = Object.values(books);
-          this.setState({ infoList, loading: false });
+          this.setState({ infoList, retrieveBooks: false, loading: false });
         }
       });
-  };
+  }
 
   render() {
+    if (this.state.retrieveBooks == true) {
+      this.getBooks();
+    }
     return (
       <View>
         <Feed infoList={this.state.infoList} searchBar={true} navigation={this.props.navigation} />

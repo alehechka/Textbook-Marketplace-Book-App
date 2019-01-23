@@ -1,4 +1,7 @@
-const tintColor = '#5BA6DF';
+const tintColor = '#A74F8E';
+
+//Dark purple: 7F2A68
+// Light blue: 5BA6DF
 
 export default {
   tintColor,
