@@ -8,16 +8,16 @@ import { _ } from "lodash";
 
 export default class Feed extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       search: "",
       thumbnail: "",
       image: "",
-      isImageViewVisible: false,
-    }
+      isImageViewVisible: false
+    };
   }
 
-  onPressViewImage = (item) => {
+  onPressViewImage = item => {
     this.setState({ thumbnail: item.thumbnail });
     this.setState({ image: item.image });
     this.setState({ isImageViewVisible: true });
@@ -30,7 +30,7 @@ export default class Feed extends React.Component {
   render() {
     return (
       <ScrollView style={{ backgroundColor: "white" }}>
-        {this.props.searchBar ?
+        {this.props.searchBar ? (
           <View style={{ marginTop: 25 }}>
             <View style={[styles.container, { marginTop: 15 }]}>
               <TextInput
@@ -39,25 +39,34 @@ export default class Feed extends React.Component {
                 onChangeText={text => this.setState({ search: text })}
                 onSubmitEditing={this.submitSearch}
               />
-            </View></View> : <View></View>}
+            </View>
+          </View>
+        ) : (
+          <View />
+        )}
         <List>
           {this.props.infoList.map(item => (
             <ListItem
               onPress={() => {
                 console.log("chat");
                 this.props.navigation.navigate("Threads", {
-                  bookKey: item.bookKey,
+                  book: item
                 });
               }}
               avatar={
                 <Avatar
                   width={100}
-                  source={item.thumbnail !== undefined ? { uri: item.thumbnail }
-                    : item.image !== null ? { uri: item.image } : require('../assets/bookDefault.png')}
+                  source={
+                    item.thumbnail !== undefined
+                      ? { uri: item.thumbnail }
+                      : item.image !== null
+                      ? { uri: item.image }
+                      : require("../assets/bookDefault.png")
+                  }
                   onPress={() => this.onPressViewImage(item)}
                 />
               }
-              key={item.key}
+              key={item.bookKey}
               title={
                 <View style={[feedstyles.right]}>
                   <Text
@@ -74,7 +83,8 @@ export default class Feed extends React.Component {
                   <View style={[feedstyles.right]}>
                     <Text>ISBN: {item.isbn}</Text>
                     <Text>
-                      {truncateAuthorName(item.authors[0])} | {item.year.substring(0,4)}
+                      {truncateAuthorName(item.authors)} |{" "}
+                      {item.year.substring(0, 4)}
                     </Text>
                     <Text />
                   </View>
@@ -96,28 +106,28 @@ export default class Feed extends React.Component {
         </List>
         <ImageView
           images={[
-            this.state.thumbnail !== undefined ?
-              {
-                source: { uri: this.state.thumbnail },
-                width: this.state.thumbnail.width,
-                height: this.state.thumbnail.height
-              } :
-              {
-                source: require('../assets/bookDefault.png'),
-                width: 150,
-                height: 150
-              },
-            this.state.image !== undefined ?
-              {
-                source: { uri: this.state.image },
-                width: Layout.window.width * (2 / 3),
-                height: Layout.window.height * (2 / 3)
-              } :
-              {
-                source: require('../assets/bookDefault.png'),
-                width: 150,
-                height: 150
-              },
+            this.state.thumbnail !== undefined
+              ? {
+                  source: { uri: this.state.thumbnail },
+                  width: this.state.thumbnail.width,
+                  height: this.state.thumbnail.height
+                }
+              : {
+                  source: require("../assets/bookDefault.png"),
+                  width: 150,
+                  height: 150
+                },
+            this.state.image !== undefined
+              ? {
+                  source: { uri: this.state.image },
+                  width: Layout.window.width * (2 / 3),
+                  height: Layout.window.height * (2 / 3)
+                }
+              : {
+                  source: require("../assets/bookDefault.png"),
+                  width: 150,
+                  height: 150
+                }
           ]}
           animationType="fade"
           isVisible={this.state.isImageViewVisible}
@@ -127,11 +137,11 @@ export default class Feed extends React.Component {
     );
   }
 }
-function truncateAuthorName(author) {
-  if (author == null) {
+function truncateAuthorName(authors) {
+  if (authors == null) {
     return "Author";
   } else {
-    const result = author;
+    const result = authors[0];
     const resultArray = result.split(" ");
     return resultArray[resultArray.length - 1];
   }

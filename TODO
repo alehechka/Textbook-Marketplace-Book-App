@@ -1,4 +1,5 @@
-Global variables do not like to update with firebase
-    Instead, make it so pages needing user will call the user from firebase (redundant urg)
-    Create new file for firebase functions
+UX design change: 
+    Users can use app without logging in -> directed to login when they try certain features
+    Create "no_login" portion of database to show books while user is not logged in
+
 

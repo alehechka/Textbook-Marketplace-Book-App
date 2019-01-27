@@ -7,14 +7,16 @@ import {
   Image,
   KeyboardAvoidingView,
   StyleSheet,
-  Alert
+  Alert,
+  Picker
 } from "react-native";
 import { styles } from "../styles/base.js";
 import firebase from "firebase";
 import { _ } from "lodash";
-import { BarCodeScanner, Permissions } from 'expo';
-var isbn = require('node-isbn');
-import Layout from '../constants/Layout';
+import { BarCodeScanner, Permissions } from "expo";
+var isbn = require("node-isbn");
+import Layout from "../constants/Layout";
+import Condition from "../constants/Condition";
 
 console.disableYellowBox = true;
 
@@ -23,7 +25,7 @@ export default class Sell extends React.Component {
     header: null
   };
   state = {
-    hasCameraPermission: null,
+    hasCameraPermission: null
   };
   constructor(props) {
     super(props);
@@ -53,15 +55,61 @@ export default class Sell extends React.Component {
     this.retrieveUser(firebase.auth().currentUser.uid);
   }
 
-  retrieveUser = (userUID) => {
+  componentDidUpdate(prevProps) {
+    //Update formFull to true when all text fields are filled
+    if (
+      this.state.isbn != null &&
+      this.state.isbn != "" &&
+      this.state.major != null &&
+      this.state.major != "" &&
+      this.state.condition != null &&
+      this.state.condition != "" &&
+      this.state.price != null &&
+      this.state.price != "" &&
+      this.state.formFull != true
+    ) {
+      this.setState({ formFull: true });
+    }
+    //Update formFull to false when a text field is deleted
+    if (
+      (this.state.isbn == "" ||
+        this.state.major == "" ||
+        this.state.condition == "" ||
+        this.state.price == "") &&
+      this.state.formFull != false
+    ) {
+      this.setState({ formFull: false });
+    }
+    //Update all book fields when book info is retrieved from ISBN api
+    if (
+      this.state.book != null &&
+      this.state.authors.length == 0 &&
+      this.state.publishedDate == null &&
+      this.state.smallThumbnail == null &&
+      this.state.thumbnail == null &&
+      this.state.year == null
+    ) {
+      console.log(this.state.book);
+      this.setState({
+        title: this.state.book.title,
+        subtitle: this.state.book.subtitle,
+        authors: this.state.book.authors,
+        year: this.state.book.publishedDate,
+        smallThumbnail: this.state.book.imageLinks.smallThumbnail,
+        thumbnail: this.state.book.imageLinks.thumbnail
+      });
+    }
+  }
+
+  retrieveUser = userUID => {
     firebase
-        .database()
-        .ref("users/" + userUID)
-        .on("value", snapshot => {
-            let user = snapshot.val();
-            this.setState({ sellingBooks: user.selling, college: user.college });
-        });
-}
+      .database()
+      .ref("users/" + userUID)
+      .on("value", snapshot => {
+        let user = snapshot.val();
+        this.setState({ sellingBooks: user.selling, college: user.college });
+      });
+  };
 
   onPressSell = () => {
     this._getBookInformation(this.state.isbn);
@@ -105,11 +153,15 @@ export default class Sell extends React.Component {
         condition: this.state.condition,
         authors: this.state.authors,
         year: this.state.year,
-        smallThumbnail: this.state.smallThumbnail,
-        thumbnail: this.state.thumbnail,
+        smallThumbnail:
+          this.state.smallThumbnail != undefined
+            ? this.state.smallThumbnail
+            : "",
+        thumbnail:
+          this.state.thumbnail != undefined ? this.state.thumbnail : "",
         image: this.state.image,
         bookKey: bookKey,
-        threadKey: threadKey,
+        threadKey: threadKey
       });
     firebase
       .database()
@@ -124,7 +176,7 @@ export default class Sell extends React.Component {
     this.props.navigation.navigate("Selling");
   };
 
-  addBookToSelling = (bookKey) => {
+  addBookToSelling = bookKey => {
     if (this.state.sellingBooks == null) {
       firebase
         .database()
@@ -143,7 +195,7 @@ export default class Sell extends React.Component {
           selling: list
         });
     }
-  }
+  };
 
   onPressScan = () => {
     this._requestCameraPermission();
@@ -153,7 +205,7 @@ export default class Sell extends React.Component {
   _requestCameraPermission = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({
-      hasCameraPermission: status === 'granted',
+      hasCameraPermission: status === "granted"
     });
   };
 
@@ -163,13 +215,16 @@ export default class Sell extends React.Component {
     this.setState({ scanBarcode: false });
   };
 
-  _getBookInformation = (isbnBook) => {
-    isbn.resolve(isbnBook).then(returnBook => {
-      this.setState({ book: returnBook });
-      console.log('Book read successful')
-    }).catch(err => {
-      console.log('ISBN Read error: ' + err);
-    });
+  _getBookInformation = isbnBook => {
+    isbn
+      .resolve(isbnBook)
+      .then(returnBook => {
+        this.setState({ book: returnBook });
+        console.log("Book read successful");
+      })
+      .catch(err => {
+        console.log("ISBN Read error: " + err);
+      });
   };
 
   onPressReturn = () => {
@@ -188,56 +243,41 @@ export default class Sell extends React.Component {
   render() {
     let listBook;
     if (this.state.formFull) {
-      listBook = <TouchableOpacity
-        style={[styles.sellbutton, { width: ((Layout.window.width / 2) - 40), marginLeft: 15 }]}
-        onPress={this.onPressSell}
-      >
-        <Text style={[styles.buttontext]}>List Book</Text>
-      </TouchableOpacity>
+      listBook = (
+        <TouchableOpacity
+          style={[
+            styles.sellbutton,
+            { width: Layout.window.width / 2 - 40, marginLeft: 15 }
+          ]}
+          onPress={this.onPressSell}
+        >
+          <Text style={[styles.buttontext]}>List Book</Text>
+        </TouchableOpacity>
+      );
     } else {
-      listBook = <TouchableOpacity
-        style={[styles.sellbutton, { width: ((Layout.window.width / 2) - 40), marginLeft: 15, backgroundColor: 'gray' }]}
-        onPress={this.onPressInvalidSell}
-      >
-        <Text style={[styles.buttontext]}>List Book</Text>
-      </TouchableOpacity>
+      listBook = (
+        <TouchableOpacity
+          style={[
+            styles.sellbutton,
+            {
+              width: Layout.window.width / 2 - 40,
+              marginLeft: 15,
+              backgroundColor: "gray"
+            }
+          ]}
+          onPress={this.onPressInvalidSell}
+        >
+          <Text style={[styles.buttontext]}>List Book</Text>
+        </TouchableOpacity>
+      );
     }
-    //Update formFull to true when all text fields are filled
-    if (this.state.isbn != null && this.state.isbn != ''
-      && this.state.major != null && this.state.major != ''
-      && this.state.condition != null && this.state.condition != ''
-      && this.state.price != null && this.state.price != ''
-      && this.state.formFull != true) {
-      this.setState({ formFull: true })
-    }
-    //Update formFull to false when a text field is deleted
-    if ((this.state.isbn == ''
-      || this.state.major == ''
-      || this.state.condition == ''
-      || this.state.price == '')
-      && this.state.formFull != false) {
-      this.setState({ formFull: false })
-    }
-    //Update all book fields when book info is retrieved from ISBN api
-    if (this.state.book != null
-      && this.state.authors.length == 0
-      && this.state.publishedDate == null
-      && this.state.smallThumbnail == null
-      && this.state.thumbnail == null) {
-      console.log(this.state.book)
-      this.setState({ title: this.state.book.title });
-      this.setState({ subtitle: this.state.book.subtitle })
-      this.setState({ authors: this.state.book.authors });
-      this.setState({ year: this.state.book.publishedDate });
-      this.setState({ smallThumbnail: this.state.book.imageLinks.smallThumbnail });
-      this.setState({ thumbnail: this.state.book.imageLinks.thumbnail });
-    }
-
     if (this.state.scanBarcode == true) {
       if (this.state.hasCameraPermission === false) {
         return (
-          <View style={[styles.container, { alignItems: 'center' }]}>
-            <Text style={[styles.abovetextVerify, { fontSize: 20 }]}>Camera permission is not granted</Text>
+          <View style={[styles.container, { alignItems: "center" }]}>
+            <Text style={[styles.abovetextVerify, { fontSize: 20 }]}>
+              Camera permission is not granted
+            </Text>
             <TouchableOpacity
               style={[styles.button, { width: 185, marginBottom: 15 }]}
               onPress={this._requestCameraPermission}
@@ -252,15 +292,20 @@ export default class Sell extends React.Component {
             </TouchableOpacity>
           </View>
         );
-      }
-      else {
+      } else {
         return (
           <View style={{ flex: 1 }}>
             <BarCodeScanner
               onBarCodeRead={this._handleIsbnRead}
               style={StyleSheet.absoluteFill}
             />
-            <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "flex-end",
+                alignItems: "center"
+              }}
+            >
               <TouchableOpacity
                 style={[styles.button, { marginBottom: 15 }]}
                 onPress={this.onPressReturn}
@@ -271,8 +316,7 @@ export default class Sell extends React.Component {
           </View>
         );
       }
-    }
-    else {
+    } else {
       return (
         <View style={[styles.container]}>
           <View style={{ alignItems: "center" }}>
@@ -308,32 +352,53 @@ export default class Sell extends React.Component {
               <View style={{ flexDirection: "column" }}>
                 <Text style={[styles.abovetext]}>Major</Text>
                 <TextInput
-                  style={[styles.halfbox, { width: ((Layout.window.width / 2) - 40), marginRight: 15 }]}
+                  style={[
+                    styles.halfbox,
+                    { width: Layout.window.width / 2 - 40, marginRight: 15 }
+                  ]}
                   placeholder={""}
                   value={this.state.major}
                   onChangeText={text => this.setState({ major: text })}
                 />
               </View>
               <View style={{ flexDirection: "column" }}>
-                <Text style={[styles.abovetext, { marginLeft: 15 }]}>Condition</Text>
-                <TextInput
-                  style={[styles.halfbox, { width: ((Layout.window.width / 2) - 40), marginLeft: 15 }]}
-                  placeholder={""}
-                  value={this.state.course}
-                  onChangeText={text => this.setState({ condition: text })}
-                />
+                <Text style={[styles.abovetext, { marginLeft: 15 }]}>
+                  Condition
+                </Text>
+
+                <Picker
+                  style={[
+                    styles.halfbox,
+                    { width: Layout.window.width / 2 - 40, marginLeft: 15 }
+                  ]}
+                  mode="dropdown"
+                  selectedValue={this.state.condition}
+                  onValueChange={(itemValue) =>
+                    this.setState({condition: itemValue})
+                  }>
+                  {Condition.condition.map((item, index) => {
+                    return (
+                      <Picker.Item label={item} value={item} key={index} />
+                    );
+                  })}
+                </Picker>
               </View>
             </View>
             <View style={[styles.row]}>
               <TouchableOpacity
-                style={[styles.uploadbutton, { width: ((Layout.window.width / 2) - 40), marginRight: 15 }]}
+                style={[
+                  styles.uploadbutton,
+                  { width: Layout.window.width / 2 - 40, marginRight: 15 }
+                ]}
                 onPress={this.onPressUpload}
               >
                 <Text style={[styles.buttontext]}>Upload</Text>
                 <Text style={[styles.buttontext]}>Image</Text>
               </TouchableOpacity>
               <View style={{ flexDirection: "column" }}>
-                <Text style={[styles.abovetext, { marginLeft: 15 }]}>Price</Text>
+                <Text style={[styles.abovetext, { marginLeft: 15 }]}>
+                  Price
+                </Text>
                 <TextInput
                   style={[styles.halfbox, { marginLeft: 15 }]}
                   placeholder={""}

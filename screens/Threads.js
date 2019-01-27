@@ -22,17 +22,33 @@ export default class ThreadScreen extends React.Component {
   static navigationOptions = {
     //header: null
   };
-  render() {
-    onPressThreads = () => {
-      this.props.navigation.navigate("Sell");
+  constructor(props) {
+    super(props);
+    this.state = {
+      book: this.props.navigation.getParam('book', 'Book not found'),
+      sellerUID: null,
+      buyerUIDs: [],
+      
     };
+  }
+
+  onPressThreads = () => {
+    console.log(this.state.book);
+    console.log(this.state.book.threadKey);
+    //this.props.navigation.navigate("Chat");
+  };
+
+  render() {
     return (
       <View style={[styles.container]}>
         <Card containerStyle={{ padding: 10 }}>
           {users.map((u, i) => {
             return (
               <ListItem
-                key={'i'}
+                onPress={() => {
+                  this.onPressThreads();
+                }}
+                key={i}
                 roundAvatar
                 title={u.name}
                 avatar={{ uri: u.avatar }}

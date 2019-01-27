@@ -114,10 +114,8 @@ export default class SignUp extends React.Component {
   }
 }
 function testEmail(email) {
-  var str = "";
-  str = email;
-
-  var final = str.search("unomaha.edu");
+  var str = email.substring(email.length-4);
+  var final = str.search(".edu");
   return final;
 }
 

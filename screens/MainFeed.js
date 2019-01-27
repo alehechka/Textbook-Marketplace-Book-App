@@ -3,6 +3,7 @@ import { View } from "react-native";
 import Feed from "../components/Feed";
 import firebase from "firebase";
 import { _ } from "lodash";
+import ignoreWarnings from "react-native-ignore-warnings";
 
 console.disableYellowBox = true;
 
@@ -18,20 +19,33 @@ export default class MainFeed extends React.Component {
       retrieveBooks: false,
       userProfile: null
     };
+    console.ignoredYellowBox = ["Setting a timer"];
   }
 
   componentDidMount() {
-    this.retrieveUser(firebase.auth().currentUser.uid);
+    ignoreWarnings("Setting a timer");
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.retrieveUser(firebase.auth().currentUser.uid);
+      }
+    });
+    
   }
 
-  retrieveUser = (userUID) => {
+  componentDidUpdate(prevProps) {
+    if(this.state.retrieveBooks == true) {
+        this.getBooks();
+    }
+}
+
+  retrieveUser = userUID => {
     firebase
       .database()
       .ref("users/" + userUID)
       .on("value", snapshot => {
         this.setState({ userProfile: snapshot.val(), retrieveBooks: true });
       });
-  }
+  };
 
   getBooks = () => {
     firebase
@@ -44,17 +58,17 @@ export default class MainFeed extends React.Component {
           this.setState({ infoList, retrieveBooks: false, loading: false });
         }
       });
-  }
+  };
 
   render() {
-    if (this.state.retrieveBooks == true) {
-      this.getBooks();
-    }
     return (
       <View>
-        <Feed infoList={this.state.infoList} searchBar={true} navigation={this.props.navigation} />
+        <Feed
+          infoList={this.state.infoList}
+          searchBar={true}
+          navigation={this.props.navigation}
+        />
       </View>
     );
   }
 }
-
