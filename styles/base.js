@@ -45,7 +45,6 @@ export const styles = StyleSheet.create({
       flex: 1,
       borderColor: "gray",
       borderWidth: 1,
-      marginBottom: 25,
     },
     button: {
       height: 49,

@@ -17,6 +17,7 @@ import { BarCodeScanner, Permissions } from "expo";
 var isbn = require("node-isbn");
 import Layout from "../constants/Layout";
 import Condition from "../constants/Condition";
+import Major from "../constants/Majors";
 
 console.disableYellowBox = true;
 
@@ -351,37 +352,41 @@ export default class Sell extends React.Component {
             <View style={[styles.row, { height: 86 }]}>
               <View style={{ flexDirection: "column" }}>
                 <Text style={[styles.abovetext]}>Major</Text>
-                <TextInput
-                  style={[
-                    styles.halfbox,
-                    { width: Layout.window.width / 2 - 40, marginRight: 15 }
-                  ]}
-                  placeholder={""}
-                  value={this.state.major}
-                  onChangeText={text => this.setState({ major: text })}
-                />
+                <View style={{ borderColor: "gray", borderWidth: 1, marginBottom: 25, height: 40, width: Layout.window.width / 2 - 40, marginRight: 15 }}>
+                  <Picker
+                    style={[styles.halfbox]}
+                    mode="dropdown"
+                    selectedValue={this.state.major}
+                    onValueChange={(itemValue) =>
+                      this.setState({ major: itemValue })
+                    }>
+                    {Major.majors.map((item, index) => {
+                      return (
+                        <Picker.Item label={item} value={item} key={index} />
+                      );
+                    })}
+                  </Picker>
+                </View>
               </View>
               <View style={{ flexDirection: "column" }}>
                 <Text style={[styles.abovetext, { marginLeft: 15 }]}>
                   Condition
                 </Text>
-
-                <Picker
-                  style={[
-                    styles.halfbox,
-                    { width: Layout.window.width / 2 - 40, marginLeft: 15 }
-                  ]}
-                  mode="dropdown"
-                  selectedValue={this.state.condition}
-                  onValueChange={(itemValue) =>
-                    this.setState({condition: itemValue})
-                  }>
-                  {Condition.condition.map((item, index) => {
-                    return (
-                      <Picker.Item label={item} value={item} key={index} />
-                    );
-                  })}
-                </Picker>
+                <View style={{ borderColor: "gray", borderWidth: 1, marginBottom: 25, height: 40, width: Layout.window.width / 2 - 40, marginLeft: 15 }}>
+                  <Picker
+                    style={[styles.halfbox]}
+                    mode="dropdown"
+                    selectedValue={this.state.condition}
+                    onValueChange={(itemValue) =>
+                      this.setState({ condition: itemValue })
+                    }>
+                    {Condition.condition.map((item, index) => {
+                      return (
+                        <Picker.Item label={item} value={item} key={index} />
+                      );
+                    })}
+                  </Picker>
+                </View>
               </View>
             </View>
             <View style={[styles.row]}>
@@ -399,13 +404,15 @@ export default class Sell extends React.Component {
                 <Text style={[styles.abovetext, { marginLeft: 15 }]}>
                   Price
                 </Text>
-                <TextInput
-                  style={[styles.halfbox, { marginLeft: 15 }]}
-                  placeholder={""}
-                  keyboardType="numeric"
-                  value={this.state.price}
-                  onChangeText={text => this.setState({ price: text })}
-                />
+                <View style={{ height: 40, marginBottom: 25 }}>
+                  <TextInput
+                    style={[styles.halfbox, { marginLeft: 15 }]}
+                    placeholder={""}
+                    keyboardType="numeric"
+                    value={this.state.price}
+                    onChangeText={text => this.setState({ price: text })}
+                  />
+                </View>
                 {listBook}
               </View>
             </View>

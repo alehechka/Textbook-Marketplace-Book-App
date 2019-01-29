@@ -6,9 +6,11 @@ import {
   Alert,
   TouchableOpacity,
   Image,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Picker
 } from "react-native";
 import { styles } from "../styles/base.js";
+import Major from "../constants/Majors";
 import firebase from "firebase";
 
 export default class SignUp extends React.Component {
@@ -38,8 +40,8 @@ export default class SignUp extends React.Component {
         major: this.state.major,
         verified: "true"
       });
-      console.log(this.state);
-      this.props.navigation.navigate("Feed");
+    console.log(this.state);
+    this.props.navigation.navigate("Feed");
   }
 
   onPressSignup = () => {
@@ -90,16 +92,27 @@ export default class SignUp extends React.Component {
           />
           <Text style={[styles.abovetext]}>Confirm Password</Text>
           <TextInput
-            style={[styles.textbox, { marginBottom: 25 }]}
+            style={[styles.textbox]}
             password={true}
             secureTextEntry={true}
             onChangeText={text => this.setState({ confirmedPassword: text })}
           />
           <Text style={[styles.abovetext]}>Major</Text>
-          <TextInput
-            style={[styles.textbox, { marginBottom: 25 }]}
-            onChangeText={text => this.setState({ major: text })}
-          />
+          <View style={{ borderColor: "gray", borderWidth: 1, marginBottom: 25 }}>
+            <Picker
+              style={[styles.textbox, {marginBottom: 0}]}
+              mode="dropdown"
+              selectedValue={this.state.major}
+              onValueChange={(itemValue) =>
+                this.setState({ major: itemValue })
+              }>
+              {Major.majors.map((item, index) => {
+                return (
+                  <Picker.Item label={item} value={item} key={index} />
+                );
+              })}
+            </Picker>
+          </View>
           <View style={{ alignItems: "center" }}>
             <TouchableOpacity
               style={[styles.button]}
@@ -114,7 +127,7 @@ export default class SignUp extends React.Component {
   }
 }
 function testEmail(email) {
-  var str = email.substring(email.length-4);
+  var str = email.substring(email.length - 4);
   var final = str.search(".edu");
   return final;
 }
