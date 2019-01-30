@@ -108,7 +108,7 @@ export default class Sell extends React.Component {
       .ref("users/" + userUID)
       .on("value", snapshot => {
         let user = snapshot.val();
-        this.setState({ sellingBooks: user.selling, college: user.college });
+        this.setState({ sellingBooks: user.selling, college: user.college, major: user.major });
       });
   };
 

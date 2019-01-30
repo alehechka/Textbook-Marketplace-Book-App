@@ -77,21 +77,21 @@ export default class LoginScreen extends React.Component {
             secureTextEntry={true}
             onChangeText={text => this.setState({ password: text })}
           />
+          <View style={{ alignItems: "center" }}>
+            <TouchableOpacity
+              style={[styles.button, { marginBottom: 25 }]}
+              onPress={this.onPressLogin}
+            >
+              <Text style={[styles.buttontext]}>Login</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button]}
+              onPress={this.onPressSignup}
+            >
+              <Text style={[styles.buttontext]}>Sign up</Text>
+            </TouchableOpacity>
+          </View>
         </KeyboardAvoidingView>
-        <View style={{ alignItems: "center" }}>
-          <TouchableOpacity
-            style={[styles.button, { marginBottom: 25 }]}
-            onPress={this.onPressLogin}
-          >
-            <Text style={[styles.buttontext]}>Login</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.button]}
-            onPress={this.onPressSignup}
-          >
-            <Text style={[styles.buttontext]}>Sign up</Text>
-          </TouchableOpacity>
-        </View>
       </View>
     );
   }
@@ -99,14 +99,14 @@ export default class LoginScreen extends React.Component {
 
 function signIn(email, password) {
   firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(() => this.props.navigation.navigate("Feed"))
-      .catch(function (error) {
-          //Handle errors here
-          var errorCode = error.code;
-          if (errorCode != null) {
-              Alert.alert("Email or password is incorrect.");
-          }
-      });
+    .auth()
+    .signInWithEmailAndPassword(email, password)
+    .then(() => this.props.navigation.navigate("Feed"))
+    .catch(function(error) {
+      //Handle errors here
+      var errorCode = error.code;
+      if (errorCode != null) {
+        Alert.alert("Email or password is incorrect.");
+      }
+    });
 }
