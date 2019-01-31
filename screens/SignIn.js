@@ -10,6 +10,8 @@ import {
 } from "react-native";
 import firebase from "firebase";
 import { styles } from "../styles/base.js";
+import t from 'tcomb-form-native';
+const Form = t.form.Form;
 
 const firebaseConfig = {
   apiKey: "AIzaSyDr4YvpZXX752crkGU0ESjHTMm8yHAFi78",
@@ -19,8 +21,27 @@ const firebaseConfig = {
   storageBucket: "bookapp-cf18c.appspot.com",
   messagingSenderId: "49641427326"
 };
-
 firebase.initializeApp(firebaseConfig);
+
+const User = t.struct({
+  email: t.String,
+  password: t.String
+});
+
+const options = {
+  fields: {
+    email: {
+      label: 'Email',
+      keyboardType: "email-address"
+    },
+    password: {
+      label: 'Password',
+      error: 'Incorrect email or password.',
+      password: true,
+      secureTextEntry: true
+    }
+  },
+};
 
 export default class LoginScreen extends React.Component {
   static navigationOptions = {
@@ -29,10 +50,10 @@ export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userEmail: "",
-      password: "",
-      userProfile: null,
-      loading: true
+      value: {
+        email: "",
+        password: "",
+      }
     };
   }
 
@@ -49,7 +70,19 @@ export default class LoginScreen extends React.Component {
   };
 
   onPressLogin = () => {
-    signIn(this.state.userEmail, this.state.password);
+    signIn(this.state.value.email, this.state.value.password) 
+  };
+  handleLoginError = (error) => {
+    if(error.code != null) {
+      let value = this.state.value;
+      value.password = "";
+      console.log(value);
+      this.setState({ value });
+    }
+  };
+
+  onChange = (value) => {
+    this.setState({ value });
   };
 
   render() {
@@ -62,20 +95,12 @@ export default class LoginScreen extends React.Component {
               source={require("../assets/tempicon.png")}
             />
           </View>
-          <Text style={[styles.abovetext]}>Email</Text>
-          <TextInput
-            style={[styles.textbox]}
-            placeholder={" ex: jdoe@college.edu"}
-            keyboardType="email-address"
-            onChangeText={text => this.setState({ userEmail: text })}
-          />
-          <Text style={[styles.abovetext]}>Password</Text>
-          <TextInput
-            style={[styles.textbox, { marginBottom: 25 }]}
-            placeholder={""}
-            password={true}
-            secureTextEntry={true}
-            onChangeText={text => this.setState({ password: text })}
+          <t.form.Form
+            ref="form"
+            type={User}
+            options={options}
+            value={this.state.value}
+            onChange={this.onChange}
           />
           <View style={{ alignItems: "center" }}>
             <TouchableOpacity
@@ -97,16 +122,36 @@ export default class LoginScreen extends React.Component {
   }
 }
 
+//TODO: FIX THIS ISSUE WITH VALIDATING EMAIl
 function signIn(email, password) {
   firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
     .then(() => this.props.navigation.navigate("Feed"))
-    .catch(function(error) {
+    .catch((error) => {
       //Handle errors here
-      var errorCode = error.code;
-      if (errorCode != null) {
-        Alert.alert("Email or password is incorrect.");
-      }
+      //if (error.code != null) {
+        //Alert.alert("Email or password is incorrect.");
+        //return false;
+        this.handleLoginError(error);
+      //}
     });
 }
+
+/*
+  <Text style={[styles.abovetext]}>Email</Text>
+          <TextInput
+            style={[styles.textbox]}
+            placeholder={" ex: jdoe@college.edu"}
+            keyboardType="email-address"
+            onChangeText={text => this.setState({ userEmail: text })}
+          />
+          <Text style={[styles.abovetext]}>Password</Text>
+          <TextInput
+            style={[styles.textbox, { marginBottom: 25 }]}
+            placeholder={""}
+            password={true}
+            secureTextEntry={true}
+            onChangeText={text => this.setState({ password: text })}
+          />
+*/

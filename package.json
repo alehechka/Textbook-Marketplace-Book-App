@@ -22,7 +22,8 @@
     "react-native-image-zoom-viewer": "^2.2.24",
     "react-native-keyboard-aware-scroll-view": "^0.8.0",
     "react-native-scalable-image": "^0.4.0",
-    "react-navigation": "^2.18.2"
+    "react-navigation": "^2.18.2",
+    "tcomb-form-native": "^0.6.20"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0"
