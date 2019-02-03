@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import firebase from "firebase";
 import { styles } from "../styles/base.js";
-import t from 'tcomb-form-native';
+import t from "tcomb-form-native";
 const Form = t.form.Form;
 
 const firebaseConfig = {
@@ -31,16 +31,16 @@ const User = t.struct({
 const options = {
   fields: {
     email: {
-      label: 'Email',
+      label: "Email",
       keyboardType: "email-address"
     },
     password: {
-      label: 'Password',
-      error: 'Incorrect email or password.',
+      label: "Password",
+      error: "Incorrect email or password.",
       password: true,
       secureTextEntry: true
     }
-  },
+  }
 };
 
 export default class LoginScreen extends React.Component {
@@ -52,7 +52,7 @@ export default class LoginScreen extends React.Component {
     this.state = {
       value: {
         email: "",
-        password: "",
+        password: ""
       }
     };
   }
@@ -69,19 +69,33 @@ export default class LoginScreen extends React.Component {
     this.props.navigation.navigate("SignUp");
   };
 
-  onPressLogin = () => {
-    signIn(this.state.value.email, this.state.value.password) 
+  onPressLogin = async () => {
+    await this.signIn();
+    await this.validateForm();
   };
-  handleLoginError = (error) => {
-    if(error.code != null) {
-      let value = this.state.value;
-      value.password = "";
-      console.log(value);
-      this.setState({ value });
+  signIn = () => {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(this.state.value.email, this.state.value.password)
+      .then(() => this.props.navigation.navigate("Feed"))
+      .catch(error => {
+        //Handle errors here
+        if (error != null) {
+          let newValue = this.state.value;
+          newValue.password = "";
+          this.onChange(null);
+          this.onChange(newValue);
+          this.refs.form.getValue();
+        }
+      });
+  };
+  validateForm = () => {
+    let thisValue = this.refs.form.getValue();
+    if(thisValue) {
     }
   };
 
-  onChange = (value) => {
+  onChange = value => {
     this.setState({ value });
   };
 
@@ -123,7 +137,7 @@ export default class LoginScreen extends React.Component {
 }
 
 //TODO: FIX THIS ISSUE WITH VALIDATING EMAIl
-function signIn(email, password) {
+/*function signIn(email, password) {
   firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
@@ -133,10 +147,10 @@ function signIn(email, password) {
       //if (error.code != null) {
         //Alert.alert("Email or password is incorrect.");
         //return false;
-        this.handleLoginError(error);
+        //this.handleLoginError(error);
       //}
     });
-}
+}*/
 
 /*
   <Text style={[styles.abovetext]}>Email</Text>
