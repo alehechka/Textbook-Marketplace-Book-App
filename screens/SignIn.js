@@ -70,11 +70,7 @@ export default class LoginScreen extends React.Component {
   };
 
   onPressLogin = async () => {
-    await this.signIn();
-    await this.validateForm();
-  };
-  signIn = () => {
-    firebase
+    await firebase
       .auth()
       .signInWithEmailAndPassword(this.state.value.email, this.state.value.password)
       .then(() => this.props.navigation.navigate("Feed"))
@@ -88,11 +84,6 @@ export default class LoginScreen extends React.Component {
           this.refs.form.getValue();
         }
       });
-  };
-  validateForm = () => {
-    let thisValue = this.refs.form.getValue();
-    if(thisValue) {
-    }
   };
 
   onChange = value => {
